@@ -535,7 +535,7 @@
             margin-right: 5px;
         }
 
-        /* Mobile gallery - MODIFIED: Now shows 8 people per page */
+        /* Mobile gallery - NOW SHOWS 8 PEOPLE PER PAGE */
         .mobile-gallery {
             display: none;
             flex-direction: column;
@@ -651,15 +651,16 @@
         }
 
         /* =========================================== */
-        /* CHANGED: Desktop Pagination - Numeral Navigator (removed dots) */
+        /* PAGINATION - NUMERAL NAVIGATOR for BOTH Desktop AND Mobile */
         /* =========================================== */
-        .desktop-pagination {
+        .pagination-container {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-top: 30px;
             gap: 15px;
             flex-wrap: wrap;
+            width: 100%;
         }
         
         .page-number {
@@ -692,32 +693,26 @@
             box-shadow: 0 0 10px rgba(174, 47, 47, 0.5);
         }
         
-        /* Mobile pagination - dots remain for mobile */
-        .mobile-pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            gap: 10px;
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.8s forwards;
-            direction: ltr !important;
+        /* Mobile specific pagination adjustments */
+        @media (max-width: 768px) {
+            .pagination-container {
+                gap: 10px;
+                margin-top: 20px;
+            }
+            
+            .page-number {
+                width: 36px;
+                height: 36px;
+                font-size: 0.95rem;
+            }
         }
         
-        .mobile-page-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ccc;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .mobile-page-indicator.active {
-            background-color: #ae2f2f;
-        }
-        
-        .mobile-page-indicator:hover {
-            transform: scale(1.2);
+        @media (max-width: 480px) {
+            .page-number {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
         }
 
         /* Back button */
@@ -1042,23 +1037,18 @@
                 <p>No matching persons found. If you know any person in danger of death penalty, please report us.</p>
             </div>
             
-            <!-- Desktop layout (6 columns) -->
+            <!-- Desktop layout (6 per page) -->
             <div class="desktop-gallery six-per-page" id="desktop-gallery">
                 <!-- Content will be populated by JavaScript -->
             </div>
             
-            <!-- Mobile layout - NOW PAGINATED (8 per page) -->
+            <!-- Mobile layout (8 per page) -->
             <div class="mobile-gallery" id="mobile-gallery">
                 <!-- Content will be populated by JavaScript -->
             </div>
             
-            <!-- Desktop Pagination - NUMERAL NAVIGATOR (replaces dots) -->
-            <div class="desktop-pagination" id="desktop-pagination">
-                <!-- Content will be populated by JavaScript -->
-            </div>
-            
-            <!-- Mobile Pagination - DOTS (for mobile only) -->
-            <div class="mobile-pagination" id="mobile-pagination">
+            <!-- PAGINATION - NUMERAL NAVIGATOR for BOTH Desktop AND Mobile -->
+            <div class="pagination-container" id="pagination-container">
                 <!-- Content will be populated by JavaScript -->
             </div>
         </div>
@@ -1287,7 +1277,7 @@
         // Global variables
         var currentPage = 1;
         var isSearching = false;
-        // CHANGED: Desktop shows 6 people per page, Mobile shows 8 people per page
+        // Desktop shows 6 people per page, Mobile shows 8 people per page
         var itemsPerPageDesktop = 6;
         var itemsPerPageMobile = 8;
         
@@ -1472,25 +1462,22 @@
             
             var desktopGallery = document.getElementById('desktop-gallery');
             var mobileGallery = document.getElementById('mobile-gallery');
-            var desktopPagination = document.getElementById('desktop-pagination');
-            var mobilePagination = document.getElementById('mobile-pagination');
+            var paginationContainer = document.getElementById('pagination-container');
             var noResultsMsg = document.getElementById('no-results');
             
-            if (!desktopGallery || !mobileGallery || !desktopPagination || !mobilePagination) return;
+            if (!desktopGallery || !mobileGallery || !paginationContainer) return;
             
             // Clear existing content
             desktopGallery.innerHTML = '';
             mobileGallery.innerHTML = '';
-            desktopPagination.innerHTML = '';
-            mobilePagination.innerHTML = '';
+            paginationContainer.innerHTML = '';
             
             // Show/hide no results
             if (items.length === 0) {
                 if (noResultsMsg) noResultsMsg.style.display = 'block';
                 desktopGallery.style.display = 'none';
                 mobileGallery.style.display = 'none';
-                desktopPagination.style.display = 'none';
-                mobilePagination.style.display = 'none';
+                paginationContainer.style.display = 'none';
                 return;
             } else {
                 if (noResultsMsg) noResultsMsg.style.display = 'none';
@@ -1499,13 +1486,12 @@
                 var mobile = isMobile();
                 desktopGallery.style.display = mobile ? 'none' : 'grid';
                 mobileGallery.style.display = mobile ? 'flex' : 'none';
-                desktopPagination.style.display = mobile ? 'none' : 'flex';
-                mobilePagination.style.display = mobile ? 'flex' : 'none';
+                paginationContainer.style.display = 'flex'; // Always show pagination
             }
             
             var totalItems = items.length;
             
-            // CHANGED: Use different items per page for desktop vs mobile
+            // Use different items per page for desktop vs mobile
             var itemsPerPage = isMobile() ? itemsPerPageMobile : itemsPerPageDesktop;
             var totalPages = Math.ceil(totalItems / itemsPerPage);
             
@@ -1549,36 +1535,21 @@
                 }
             }
             
-            // CHANGED: Desktop Pagination - NUMERAL NAVIGATOR
-            if (!isMobile()) {
-                for (var p = 1; p <= totalPages; p++) {
-                    var pageNumber = document.createElement('div');
-                    pageNumber.className = 'page-number' + (p === currentPage ? ' active' : '');
-                    pageNumber.dataset.page = p;
-                    pageNumber.textContent = p;
-                    
-                    pageNumber.addEventListener('click', function() {
-                        currentPage = parseInt(this.dataset.page);
-                        renderGallery();
-                    });
-                    
-                    desktopPagination.appendChild(pageNumber);
-                }
-            } else {
-                // Mobile Pagination - DOTS
-                for (var d = 1; d <= totalPages; d++) {
-                    var dot = document.createElement('div');
-                    dot.className = 'mobile-page-indicator' + (d === currentPage ? ' active' : '');
-                    dot.dataset.page = d;
-                    dot.style.animationDelay = (0.8 + d * 0.05) + 's';
-                    
-                    dot.addEventListener('click', function() {
-                        currentPage = parseInt(this.dataset.page);
-                        renderGallery();
-                    });
-                    
-                    mobilePagination.appendChild(dot);
-                }
+            // ============================================
+            // PAGINATION - NUMERAL NAVIGATOR for BOTH Desktop AND Mobile
+            // ============================================
+            for (var p = 1; p <= totalPages; p++) {
+                var pageNumber = document.createElement('div');
+                pageNumber.className = 'page-number' + (p === currentPage ? ' active' : '');
+                pageNumber.dataset.page = p;
+                pageNumber.textContent = p;
+                
+                pageNumber.addEventListener('click', function() {
+                    currentPage = parseInt(this.dataset.page);
+                    renderGallery();
+                });
+                
+                paginationContainer.appendChild(pageNumber);
             }
             
             // Trigger animations
@@ -1588,13 +1559,6 @@
                     cards[c].style.animation = 'none';
                     cards[c].offsetHeight;
                     cards[c].style.animation = 'cardFadeIn 0.8s ease-out ' + cards[c].style.animationDelay + ' forwards';
-                }
-                
-                var dots = document.querySelectorAll('.mobile-page-indicator');
-                for (var ind = 0; ind < dots.length; ind++) {
-                    dots[ind].style.animation = 'none';
-                    dots[ind].offsetHeight;
-                    dots[ind].style.animation = 'fadeIn 0.8s ease-out ' + dots[ind].style.animationDelay + ' forwards';
                 }
             }, 50);
         }
