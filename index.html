@@ -51,8 +51,32 @@
             padding: 16px 20px 16px 50px;
         }
 
-        [dir="rtl"] .button-container {
-            flex-direction: row-reverse;
+        /* =========================================== */
+        /* FIXED: Mobile Buttons - Always Vertical */
+        /* This overrides RTL row-reverse on mobile */
+        /* =========================================== */
+        
+        @media (max-width: 768px) {
+            /* Force buttons to be vertical on ALL mobile views */
+            .button-container {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 15px !important;
+                width: 100% !important;
+            }
+            
+            /* Explicitly override any RTL styling */
+            [dir="rtl"] .button-container {
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            
+            /* Make buttons full width on mobile */
+            .btn {
+                width: 100% !important;
+                max-width: 300px !important;
+                margin: 0 auto !important;
+            }
         }
 
         body {
@@ -672,15 +696,13 @@
         /* FIXED: Mobile Header - Buttons No Longer Cover Title */
         /* =========================================== */
         
-        /* Add padding to content on mobile to account for fixed buttons */
         @media (max-width: 768px) {
             .page .content {
-                padding-top: 80px !important;  /* Space for back button and language toggle */
+                padding-top: 80px !important;
                 position: relative;
                 min-height: calc(100vh - 40px);
             }
             
-            /* Adjust headline position and size for mobile */
             .page .headline,
             .page .gallery-title {
                 margin-top: 10px;
@@ -693,7 +715,6 @@
                 width: 100%;
             }
             
-            /* Make back button slightly smaller on mobile */
             .back-button {
                 top: 15px;
                 left: 15px;
@@ -703,7 +724,6 @@
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             }
             
-            /* Adjust language toggle for mobile */
             .language-toggle {
                 top: 15px;
                 right: 15px;
@@ -713,7 +733,6 @@
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             }
             
-            /* RTL adjustments for mobile */
             [dir="rtl"] .back-button {
                 left: auto;
                 right: 15px;
@@ -724,7 +743,6 @@
                 left: 15px;
             }
             
-            /* Ensure description has proper spacing */
             .page .description {
                 margin-top: 10px;
                 margin-bottom: 30px;
@@ -733,7 +751,6 @@
                 padding-right: 15px;
             }
             
-            /* Fix for gallery page specifically */
             #gallery-page .content {
                 padding-top: 80px !important;
             }
@@ -743,13 +760,11 @@
                 margin-bottom: 20px;
             }
             
-            /* Ensure search container doesn't get hidden */
             #gallery-page .search-container {
                 margin-top: 10px;
             }
         }
 
-        /* Extra small devices */
         @media (max-width: 480px) {
             .page .content {
                 padding-top: 90px !important;
@@ -787,7 +802,7 @@
             }
         }
 
-        /* Responsive styles - Keep existing but override where needed */
+        /* Keep existing responsive styles but ensure button vertical stacking */
         @media (max-width: 1024px) {
             .headline {
                 font-size: 2.8rem;
@@ -815,7 +830,6 @@
             }
         }
 
-        /* Override previous mobile styles with our fixed versions */
         @media (max-width: 768px) {
             .page {
                 padding: 10px;
@@ -835,15 +849,23 @@
                 margin-bottom: 30px;
             }
             
+            /* BUTTON FIX IS HERE - This overrides RTL */
             .button-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 15px !important;
+                width: 100% !important;
+            }
+            
+            [dir="rtl"] .button-container {
+                flex-direction: column !important;
+                align-items: center !important;
             }
             
             .btn {
-                width: 100%;
-                max-width: 300px;
+                width: 100% !important;
+                max-width: 300px !important;
+                margin: 0 auto !important;
             }
             
             .gallery-title {
@@ -1149,7 +1171,7 @@
             };
         }
 
-        // FIXED: Language switching - IMMEDIATE update
+        // Language switching - IMMEDIATE update
         function switchLanguage(lang) {
             appData.currentLanguage = lang;
             var langData = appData.languages[lang];
@@ -1177,7 +1199,7 @@
                     : searchBar.getAttribute('data-fa-placeholder');
             }
             
-            // CRITICAL: Force clear cache and reset to page 1
+            // Force clear cache and reset to page 1
             cachedItems = null;
             cachedLanguage = null;
             cachedSearchTerm = null;
