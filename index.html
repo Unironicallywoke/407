@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Persons Registry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Vazirmatn', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* RTL Support for Persian */
+        [dir="rtl"] {
+            text-align: right;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        [dir="rtl"] .back-button {
+            left: auto;
+            right: 20px;
+        }
+
+        [dir="rtl"] .back-button:hover {
+            transform: translateX(5px);
+        }
+
+        [dir="rtl"] .nav-arrow.left {
+            left: auto;
+            right: 20px;
+        }
+
+        [dir="rtl"] .nav-arrow.right {
+            right: auto;
+            left: 20px;
+        }
+
+        [dir="rtl"] .search-icon {
+            right: auto;
+            left: 20px;
+        }
+
+        [dir="rtl"] .clear-search {
+            right: auto;
+            left: 50px;
+        }
+
+        [dir="rtl"] .search-bar {
+            padding: 16px 20px 16px 50px;
+        }
+
+        [dir="rtl"] .button-container {
+            flex-direction: row-reverse;
+        }
+
+        body {
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Language Toggle Button */
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 500;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        [dir="rtl"] .language-toggle {
+            right: auto;
+            left: 20px;
+        }
+
+        .language-toggle:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .language-toggle:active {
+            transform: translateY(0);
+        }
+
+        .language-flag {
+            font-size: 1.2rem;
+        }
+
+        /* Page container and common styles */
+        .page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            overflow-y: auto;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: pageFadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* =========================================== */
+        /* BACKGROUND IMAGES - ADD YOUR IMAGES HERE */
+        /* =========================================== */
+        
+        /* Front Page - Desktop (Photo 1) */
+        #front-page {
+            /* REPLACE THIS URL WITH YOUR Photo 1 */
+            background-image: url('assets/lionsword.JPEG');
+        }
+
+        /* Second Page - Same as front page */
+        #second-page {
+            /* REPLACE THIS URL WITH YOUR Photo 1 */
+            background-image: url('path/to/your/photo1.jpg');
+        }
+
+        /* Gallery Page - Desktop (Photo 4) */
+        #gallery-page {
+            /* REPLACE THIS URL WITH YOUR Photo 4 */
+            background-image: url('path/to/your/photo4.jpg');
+        }
+
+        /* Mobile Backgrounds */
+        @media (max-width: 768px) {
+            /* Front Page - Mobile (Photo 2) */
+            #front-page {
+                /* REPLACE THIS URL WITH YOUR Photo 2 */
+                background-image: url('assets/lionsword_m.JPEG') !important;
+            }
+            
+            /* Gallery Page - Mobile (Photo 5) */
+            #gallery-page {
+                /* REPLACE THIS URL WITH YOUR Photo 5 */
+                background-image: url('path/to/your/photo5.jpg') !important;
+            }
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.363); /* Reduced opacity */
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0);
+            min-height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            animation: contentFadeIn 1s ease-out 0.3s forwards; /* Delayed fade-in */
+        }
+
+        @keyframes contentFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Front page styles */
+        #front-page .content {
+            background-color: rgba(255, 255, 255, 0.147); 
+        }
+
+        .headline {
+            font-size: 3.5rem;
+            color: #000000;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: textFadeIn 1s ease-out 0.5s forwards; 
+        }
+
+        .description {
+            font-size: 1.5rem;
+            color: #000000;
+            text-align: center;
+            max-width: 800px;
+            margin-bottom: 60px;
+            line-height: 1.6;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.058);
+            opacity: 0;
+            animation: textFadeIn 1s ease-out 0.7s forwards; 
+        }
+
+        @keyframes textFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button container */
+        .button-container {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            justify-content: center;
+            opacity: 0;
+            animation: buttonsFadeIn 1s ease-out 0.9s forwards; /* Delayed animation */
+        }
+
+        @keyframes buttonsFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-align: center;
+            min-width: 180px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: buttonFadeIn 0.8s ease-out forwards;
+        }
+
+        .btn-primary {
+            background-color: #5e0808;
+            color: white;
+            animation-delay: 1s; /* Staggered animation for buttons */
+        }
+
+        .btn-secondary {
+            background-color: #bd3232;
+            color: #ffffff;
+            border: 2px solid #dddddd00;
+            animation-delay: 1.2s; /* Staggered animation for buttons */
+        }
+
+        @keyframes buttonFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Search bar styles */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+            opacity: 0;
+            animation: searchFadeIn 0.8s ease-out 0.6s forwards;
+        }
+
+        @keyframes searchFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #000000;
+            box-shadow: 0 4px 15px rgba(26, 90, 122, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #77777700;
+            font-size: 1.2rem;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #777;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+            transition: color 0.2s;
+        }
+
+        .clear-search:hover {
+            color: #1a5a7a;
+        }
+
+        .search-info {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1s forwards;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            width: 100%;
+            display: none;
+        }
+
+        /* Lost persons gallery */
+        .gallery-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .gallery-title {
+            font-size: 2.5rem;
+            color: #000000;
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+            opacity: 0;
+            animation: textFadeIn 0.8s ease-out 0.4s forwards;
+        }
+
+        /* Desktop gallery (3 columns) */
+        .desktop-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .person-card {
+            background-color: rgba(255, 255, 255, 0.85); /* Reduced opacity */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(214, 8, 8, 0.1);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            animation: cardFadeIn 0.8s ease-out forwards;
+        }
+
+        .person-card:nth-child(1) { animation-delay: 0.5s; }
+        .person-card:nth-child(2) { animation-delay: 0.6s; }
+        .person-card:nth-child(3) { animation-delay: 0.7s; }
+
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .person-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .person-photo {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 2px solid #eee;
+        }
+
+        .person-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .person-name {
+            font-size: 1.5rem;
+            color: #000000;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .person-name:hover {
+            color: #5e0808;
+            text-decoration: underline;
+        }
+        
+        .person-name a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .person-name a:hover {
+            text-decoration: underline;
+        }
+
+        .person-date {
+            font-size: 1rem;
+            color: #ca1e1e;
+        }
+
+        /* Priority star indicator */
+        .priority-star {
+            color: #ca1e1e;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        [dir="rtl"] .priority-star {
+            margin-left: 0;
+            margin-right: 5px;
+        }
+
+        /* Mobile gallery (2 rows) */
+        .mobile-gallery {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mobile-person-card {
+            background-color: rgba(255, 255, 255, 0.85); /* Reduced opacity */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            animation: cardFadeIn 0.8s ease-out forwards;
+        }
+
+        .mobile-person-card:nth-child(1) { animation-delay: 0.4s; }
+        .mobile-person-card:nth-child(2) { animation-delay: 0.5s; }
+        .mobile-person-card:nth-child(3) { animation-delay: 0.6s; }
+        .mobile-person-card:nth-child(4) { animation-delay: 0.7s; }
+        .mobile-person-card:nth-child(5) { animation-delay: 0.8s; }
+        .mobile-person-card:nth-child(6) { animation-delay: 0.9s; }
+
+        .mobile-person-photo {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .mobile-person-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .mobile-person-name {
+            font-size: 1.4rem;
+            color: #000000;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .mobile-person-name:hover {
+            color: #5e0808;
+            text-decoration: underline;
+        }
+        
+        .mobile-person-name a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .mobile-person-name a:hover {
+            text-decoration: underline;
+        }
+
+        .mobile-person-date {
+            font-size: 1rem;
+            color: #b32121;
+        }
+
+        /* Navigation arrows - TRANSPARENT and ALWAYS VISIBLE */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 70px;
+            height: 70px;
+            color: rgba(255, 255, 255, 0.9); /* White color with transparency */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: 100;
+            opacity: 1 !important; /* Always visible */
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            background-color: transparent !important; /* No background */
+            animation: arrowFadeIn 0.8s ease-out 1s forwards;
+        }
+
+        @keyframes arrowFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(-50%) scale(1);
+            }
+        }
+
+        .nav-arrow:hover {
+            color: rgba(255, 255, 255, 1); /* Brighter white on hover */
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.left {
+            left: 20px;
+        }
+
+        .nav-arrow.right {
+            right: 20px;
+        }
+
+        /* Pagination indicator - FIXED: Always LTR orientation for both languages */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
+            direction: ltr !important; /* Force LTR for pagination regardless of language */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .page-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .page-indicator.active {
+            background-color: #ae2f2f;
+        }
+
+        .page-indicator:hover {
+            transform: scale(1.2);
+        }
+
+        /* Back button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.85); /* Reduced opacity */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: buttonFadeIn 0.8s ease-out 0.4s forwards;
+        }
+
+        .back-button:hover {
+            background-color: #f0f0f0;
+            transform: translateX(-5px);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .headline {
+                font-size: 2.8rem;
+            }
+            
+            .description {
+                font-size: 1.1rem;
+                margin-bottom: 40px;
+            }
+            
+            .btn {
+                padding: 14px 30px;
+                min-width: 160px;
+            }
+            
+            /* Adjust arrow size for medium screens */
+            .nav-arrow {
+                width: 60px;
+                height: 60px;
+                font-size: 3.5rem;
+            }
+            
+            .search-bar {
+                padding: 14px 50px 14px 20px;
+                font-size: 1rem;
+            }
+            
+            .language-toggle {
+                top: 15px;
+                right: 15px;
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            [dir="rtl"] .language-toggle {
+                right: auto;
+                left: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 15px;
+                background-color: rgba(255, 255, 255, 0.8); /* Slightly more opaque on mobile */
+            }
+            
+            .headline {
+                font-size: 2.2rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .gallery-title {
+                font-size: 2rem;
+            }
+            
+            /* Switch to mobile gallery on smaller screens */
+            .desktop-gallery {
+                display: none;
+            }
+            
+            .mobile-gallery {
+                display: flex;
+            }
+            
+            /* Hide navigation arrows on mobile */
+            .nav-arrow {
+                display: none;
+            }
+            
+            .back-button {
+                top: 10px;
+                left: 10px;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            [dir="rtl"] .back-button {
+                left: auto;
+                right: 10px;
+            }
+            
+            .search-container {
+                margin-bottom: 30px;
+            }
+            
+            .search-bar {
+                padding: 12px 45px 12px 15px;
+            }
+            
+            .search-icon {
+                right: 15px;
+            }
+            
+            .clear-search {
+                right: 40px;
+            }
+            
+            .language-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            [dir="rtl"] .language-toggle {
+                right: auto;
+                left: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .headline {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                padding: 10px;
+            }
+            
+            .person-photo, .mobile-person-photo {
+                height: 200px;
+            }
+            
+            .person-name, .mobile-person-name {
+                font-size: 1.2rem;
+            }
+            
+            .search-bar {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+    
+    <!-- Add Vazirmatn font for Persian support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+</head>
+<body dir="ltr">
+    <!-- Language Toggle Button -->
+    <div class="language-toggle" id="language-toggle">
+        <span class="language-flag">🇬🇧</span>
+        <span class="language-text">English</span>
+    </div>
+
+    <!-- Front Page -->
+    <div id="front-page" class="page active">
+        <div class="content">
+            <h1 class="headline" data-en="List Of People In Custody and In Danger of Death penalty In Iran" data-fa="لیست افراد بازداشت شده و در خطر اعدام">List Of People In Custody and In Danger of Death penalty In Iran</h1>
+            <p class="description" data-en="These lists are gathered from reliable sources, Mostly from families across social media platforms such as X, Telegram and Instagram." 
+               data-fa="تهیه این لیست ها از طریق منابع موثق و قابل اطمینان صورت گرفته است که اکثر نام ها  توسط خانداده ها در پلتفرم های ایکس، تلگرام و اینستاگرام انتشار یافته اند.">
+                These lists are gathered from reliable sources, Mostly from families across social media platforms such as X, Telegram and Instagram.
+            </p>
+            <div class="button-container">
+                <button class="btn btn-primary" id="btn-page2" data-en="List Of People" data-fa="لیست افراد">List Of People</button>
+                <button class="btn btn-secondary" id="btn-other" data-en="Report an Endangered Person" data-fa="گزارش افراد در معرض خطر">Report an Endangered Person</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Page -->
+    <div id="second-page" class="page">
+        <div class="content">
+            <button class="back-button" id="back-to-front" data-en="← Back" data-fa="← بازگشت">← Back</button>
+            <h1 class="headline" data-en="List Of People" data-fa="لیست افراد">List Of People</h1>
+            <p class="description" data-en="" data-fa="">
+                
+            </p>
+            <div class="button-container">
+                <button class="btn btn-primary" id="btn-lost-persons" data-en="In Danger Of Death Penalty" data-fa="در خطر اعدام">In Danger Of Death Penalty</button>
+                <button class="btn btn-secondary" id="btn-category2" data-en="Missing" data-fa="مفقود شده">Missing</button>
+                <button class="btn btn-secondary" id="btn-category3" data-en="In Custody" data-fa="بازداشتی">In Custody</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lost Persons Gallery Page -->
+    <div id="gallery-page" class="page page-container">
+        <div class="nav-arrow left" id="prev-page">‹</div>
+        <div class="nav-arrow right" id="next-page">›</div>
+        
+        <div class="content">
+            <button class="back-button" id="back-to-second" data-en="← Back" data-fa="← بازگشت">← Back</button>
+            <h1 class="gallery-title" data-en="People In Danger Of Death Penalty" data-fa="افراد در خطر اعدام">People In Danger Of Death Penalty</h1>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" class="search-bar" id="search-bar" placeholder="Search by name..." 
+                       data-en-placeholder="Search by name..." 
+                       data-fa-placeholder="جستجو بر اساس نام...">
+                <button class="clear-search" id="clear-search">✕</button>
+                <div class="search-icon">🔍</div>
+                <div class="search-info" data-en="Search through missing persons by name." 
+                     data-fa="در میان افراد مفقود شده بر اساس نام جستجو کنید.">
+                    Search through missing persons by name.
+                </div>
+            </div>
+            
+            <!-- No results message -->
+            <div class="no-results" id="no-results" data-en="No matching persons found. If you know any person in danger of death penalty, please report us." 
+                 data-fa="فردی با این مشخصات یافت نشد. اگر شخص در معرض خطری را میشناسید که نامش در لیست نیست، آن را به ما گزارش دهید.">
+                <p>No matching persons found. If you know any person in danger of death penalty, please report us.</p>
+            </div>
+            
+            <!-- Desktop layout (3 columns) -->
+            <div class="desktop-gallery" id="desktop-gallery">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            
+            <!-- Mobile layout (vertical scrolling) -->
+            <div class="mobile-gallery" id="mobile-gallery">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            
+            <!-- Pagination indicators (desktop only) - direction forced to LTR in CSS -->
+            <div class="pagination" id="pagination">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // INSTRUCTIONS FOR ADDING YOUR LOCAL FILES
+        // ============================================
+        
+        // 1. CREATE A FOLDER STRUCTURE:
+        //    - Create a folder named "images" in the same directory as this HTML file
+        //    - Place your photos in the "images" folder with these names:
+        //        1.jpeg, 2.jpeg, 3.jpeg, etc. (match the numbers to names)
+        
+        // 2. REPLACE BACKGROUND IMAGES IN THE CSS SECTION ABOVE:
+        //    - Look for the CSS section marked "BACKGROUND IMAGES"
+        //    - Replace the URLs with your local file paths
+        
+        // 3. REPLACE THE SAMPLE DATA BELOW with your actual data files
+        
+        // Multi-language data structure
+        const appData = {
+            currentLanguage: 'en', // Default language
+            languages: {
+                en: {
+                    name: "English",
+                    flag: "🇬🇧",
+                    dir: "ltr"
+                },
+                fa: {
+                    name: "فارسی",
+                    flag: "🇮🇷", 
+                    dir: "rtl"
+                }
+            },
+            
+            lostPersons: {
+                // ============================================
+                // NAMES FILE CONTENT - English
+                // Format: "1. Name" - Add * for priority (e.g., "1. * John Mayer")
+                // ============================================
+                names_en: [
+                    "1. * John Mayer",
+                    "2. Sarah Johnson", 
+                    "3. Michael Chen",
+                    "4. * Emma Rodriguez",
+                    "5. David Wilson",
+                    "6. Olivia Smith",
+                    "7. * James Brown",
+                    "8. Sophia Williams",
+                    "9. Daniel Taylor",
+                    "10. Isabella Martinez",
+                    "11. Christopher Davis",
+                    "12. Amelia Anderson"
+                ],
+                
+                // ============================================
+                // NAMES FILE CONTENT - Persian (Farsi)
+                // Add Persian names here matching the English names
+                // Add * for priority (e.g., "1. * جان مایر")
+                // ============================================
+                names_fa: [
+                    "1. * جان مایر",
+                    "2. سارا جانسون",
+                    "3. مایکل چن", 
+                    "4. * اما رودریگز",
+                    "5. دیوید ویلسون",
+                    "6. اولیویا اسمیت",
+                    "7. * جیمز براون",
+                    "8. سوفیا ویلیامز",
+                    "9. دنیل تیلور",
+                    "10. ایزابلا مارتینز",
+                    "11. کریستوفر دیویس",
+                    "12. آملیا اندرسون"
+                ],
+                
+                // ============================================
+                // DATES FILE CONTENT - English
+                // ============================================
+                dates_en: [
+                    "1. Jan 15, 2023",
+                    "2. Feb 3, 2023",
+                    "3. Mar 22, 2023",
+                    "4. Apr 10, 2023",
+                    "5. May 5, 2023",
+                    "6. Jun 18, 2023",
+                    "7. Jul 7, 2023",
+                    "8. Aug 29, 2023",
+                    "9. Sep 14, 2023",
+                    "10. Oct 1, 2023",
+                    "11. Nov 21, 2023",
+                    "12. Dec 9, 2023"
+                ],
+                
+                // ============================================
+                // DATES FILE CONTENT - Persian (Jalali dates)
+                // Add Persian dates here matching the English dates
+                // ============================================
+                dates_fa: [
+                    "1. دی ۲۵، ۱۴۰۱",
+                    "2. بهمن ۱۴، ۱۴۰۱",
+                    "3. فروردین ۲، ۱۴۰۲",
+                    "4. فروردین ۲۱، ۱۴۰۲",
+                    "5. اردیبهشت ۱۵، ۱۴۰۲",
+                    "6. خرداد ۲۸، ۱۴۰۲",
+                    "7. تیر ۱۶، ۱۴۰۲",
+                    "8. شهریور ۷، ۱۴۰۲",
+                    "9. شهریور ۲۳، ۱۴۰۲",
+                    "10. مهر ۹، ۱۴۰۲",
+                    "11. آذر ۱، ۱۴۰۲",
+                    "12. آذر ۱۸، ۱۴۰۲"
+                ],
+                
+                // ============================================
+                // LINKS FILE CONTENT - URL sources for each person
+                // Format: "1. https://example.com/person1"
+                // These will be used as clickable links on the names
+                // ============================================
+                links_en: [
+                    "1. https://twitter.com/example1",
+                    "2. https://twitter.com/example2",
+                    "3. https://twitter.com/example3",
+                    "4. https://twitter.com/example4",
+                    "5. https://twitter.com/example5",
+                    "6. https://twitter.com/example6",
+                    "7. https://twitter.com/example7",
+                    "8. https://twitter.com/example8",
+                    "9. https://twitter.com/example9",
+                    "10. https://twitter.com/example10",
+                    "11. https://twitter.com/example11",
+                    "12. https://twitter.com/example12"
+                ],
+                
+                links_fa: [
+                    "1. https://twitter.com/example1",
+                    "2. https://twitter.com/example2",
+                    "3. https://twitter.com/example3",
+                    "4. https://twitter.com/example4",
+                    "5. https://twitter.com/example5",
+                    "6. https://twitter.com/example6",
+                    "7. https://twitter.com/example7",
+                    "8. https://twitter.com/example8",
+                    "9. https://twitter.com/example9",
+                    "10. https://twitter.com/example10",
+                    "11. https://twitter.com/example11",
+                    "12. https://twitter.com/example12"
+                ],
+                
+                // ============================================
+                // LOCAL IMAGE FILES
+                // Replace these with your local image paths
+                // ============================================
+                photos: [
+                    "images/1.jpeg",
+                    "images/2.jpeg", 
+                    "images/3.jpeg",
+                    "images/4.jpeg",
+                    "images/5.jpeg",
+                    "images/6.jpeg",
+                    "images/7.jpeg",
+                    "images/8.jpeg",
+                    "images/9.jpeg",
+                    "images/10.jpeg",
+                    "images/11.jpeg",
+                    "images/12.jpeg"
+                ]
+            }
+        };
+
+        // Global variables for search functionality
+        let currentPage = 1;
+        let isSearching = false;
+        const itemsPerPageDesktop = 3;
+        const itemsPerPageMobile = 2;
+        
+        // Cache for current language items to prevent recalculation
+        let cachedItems = null;
+        let cachedLanguage = null;
+        let cachedSearchTerm = null;
+
+        // Function to handle missing images
+        function handleMissingImage(imgElement, index) {
+            imgElement.onerror = function() {
+                console.warn(`Image ${appData.lostPersons.photos[index]} not found. Using placeholder.`);
+                this.src = `https://via.placeholder.com/300x400/1a5a7a/ffffff?text=Person+${index+1}`;
+                this.alt = `Placeholder for ${appData.lostPersons.names_en[index]}`;
+            };
+        }
+
+        // Language switching function - FIXED: Force re-render with correct language data
+        function switchLanguage(lang) {
+            appData.currentLanguage = lang;
+            const langData = appData.languages[lang];
+            
+            // Update HTML direction
+            document.body.dir = langData.dir;
+            document.documentElement.lang = lang;
+            
+            // Update language toggle button
+            const toggleBtn = document.getElementById('language-toggle');
+            const flagSpan = toggleBtn.querySelector('.language-flag');
+            const textSpan = toggleBtn.querySelector('.language-text');
+            
+            flagSpan.textContent = langData.flag;
+            textSpan.textContent = lang === 'en' ? 'فارسی' : 'English';
+            
+            // Update all elements with data attributes
+            updateTextElements();
+            
+            // Update search bar placeholder
+            const searchBar = document.getElementById('search-bar');
+            if (searchBar) {
+                searchBar.placeholder = lang === 'en' 
+                    ? searchBar.getAttribute('data-en-placeholder') 
+                    : searchBar.getAttribute('data-fa-placeholder');
+            }
+            
+            // Clear cache to force refresh with new language
+            cachedItems = null;
+            cachedLanguage = null;
+            cachedSearchTerm = null;
+            
+            // Reset to first page
+            currentPage = 1;
+            
+            // Re-render gallery with current language - IMMEDIATELY
+            renderGallery();
+            
+            // Save language preference to localStorage
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Update all text elements based on current language
+        function updateTextElements() {
+            const elements = document.querySelectorAll('[data-en], [data-fa]');
+            
+            elements.forEach(element => {
+                if (appData.currentLanguage === 'en') {
+                    if (element.hasAttribute('data-en')) {
+                        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                            element.placeholder = element.getAttribute('data-en');
+                        } else {
+                            element.textContent = element.getAttribute('data-en');
+                        }
+                    }
+                } else {
+                    if (element.hasAttribute('data-fa')) {
+                        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                            element.placeholder = element.getAttribute('data-fa');
+                        } else {
+                            element.textContent = element.getAttribute('data-fa');
+                        }
+                    }
+                }
+            });
+        }
+
+        // Parse name to check for priority star and clean name
+        function parseName(nameString) {
+            const hasPriority = nameString.includes('*');
+            // Remove the "*" and any extra spaces
+            let cleanName = nameString.replace('*', '').replace(/\s+/g, ' ').trim();
+            return {
+                displayName: cleanName,
+                hasPriority: hasPriority,
+                originalName: nameString
+            };
+        }
+
+        // Parse link from link string
+        function parseLink(linkString) {
+            if (!linkString) return '#';
+            const match = linkString.match(/\d+\.\s*(.+)/);
+            return match ? match[1] : linkString;
+        }
+
+        // Get current language data with priority sorting - FIXED: Always returns fresh sorted data
+        function getCurrentData() {
+            const lang = appData.currentLanguage;
+            
+            // Get arrays for current language
+            const nameArray = appData.lostPersons[`names_${lang}`] || appData.lostPersons.names_en;
+            const dateArray = appData.lostPersons[`dates_${lang}`] || appData.lostPersons.dates_en;
+            const linkArray = appData.lostPersons[`links_${lang}`] || appData.lostPersons.links_en;
+            const photosArray = appData.lostPersons.photos;
+            
+            // Create array of objects with all data
+            const combined = nameArray.map((name, index) => {
+                const parsed = parseName(name);
+                // Make sure we have valid data for each index
+                const date = dateArray[index] || `${index + 1}. Date Unknown`;
+                const link = linkArray[index] || `${index + 1}. #`;
+                const photo = photosArray[index] || "images/placeholder.jpg";
+                
+                return {
+                    originalName: name,
+                    displayName: parsed.displayName,
+                    hasPriority: parsed.hasPriority,
+                    date: date,
+                    link: link,
+                    photo: photo,
+                    index: index
+                };
+            });
+            
+            // Sort: priority first (those with *), then others
+            combined.sort((a, b) => {
+                // Priority items come first
+                if (a.hasPriority && !b.hasPriority) return -1;
+                if (!a.hasPriority && b.hasPriority) return 1;
+                // If both have priority or both don't, keep original order
+                return 0;
+            });
+            
+            return {
+                items: combined
+            };
+        }
+
+        // Get filtered items based on search term - WITH CACHING for performance
+        function getFilteredItems(searchTerm) {
+            const currentLang = appData.currentLanguage;
+            
+            // If language changed or search term changed, recalculate
+            if (cachedLanguage !== currentLang || cachedSearchTerm !== searchTerm || cachedItems === null) {
+                const currentData = getCurrentData();
+                const allItems = currentData.items;
+                
+                if (!searchTerm || searchTerm.trim() === '') {
+                    cachedItems = allItems;
+                    isSearching = false;
+                } else {
+                    const term = searchTerm.toLowerCase().trim();
+                    cachedItems = allItems.filter(item => 
+                        item.displayName.toLowerCase().includes(term)
+                    );
+                    isSearching = true;
+                }
+                
+                cachedLanguage = currentLang;
+                cachedSearchTerm = searchTerm;
+            }
+            
+            return cachedItems;
+        }
+
+        // Page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all page elements
+            const frontPage = document.getElementById('front-page');
+            const secondPage = document.getElementById('second-page');
+            const galleryPage = document.getElementById('gallery-page');
+            
+            // Navigation buttons
+            const btnPage2 = document.getElementById('btn-page2');
+            const btnOther = document.getElementById('btn-other');
+            const btnLostPersons = document.getElementById('btn-lost-persons');
+            const btnCategory2 = document.getElementById('btn-category2');
+            const btnCategory3 = document.getElementById('btn-category3');
+            const backToFront = document.getElementById('back-to-front');
+            const backToSecond = document.getElementById('back-to-second');
+            
+            // Gallery navigation
+            const prevPage = document.getElementById('prev-page');
+            const nextPage = document.getElementById('next-page');
+            
+            // Search elements
+            const searchBar = document.getElementById('search-bar');
+            const clearSearchBtn = document.getElementById('clear-search');
+            const noResultsMsg = document.getElementById('no-results');
+            
+            // Language toggle
+            const languageToggle = document.getElementById('language-toggle');
+            
+            // Load saved language preference
+            const savedLanguage = localStorage.getItem('preferredLanguage');
+            if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fa')) {
+                // Use setTimeout to ensure DOM is fully ready
+                setTimeout(() => {
+                    switchLanguage(savedLanguage);
+                }, 10);
+            }
+            
+            // Language toggle event
+            languageToggle.addEventListener('click', function() {
+                const newLang = appData.currentLanguage === 'en' ? 'fa' : 'en';
+                switchLanguage(newLang);
+            });
+            
+            // Function to show a specific page with animation
+            function showPage(page) {
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(p => {
+                    p.classList.remove('active');
+                });
+                
+                // Reset animations for the new page
+                page.style.animation = 'none';
+                page.offsetHeight;
+                page.style.animation = 'pageFadeIn 0.8s ease-out forwards';
+                
+                // Show the requested page
+                page.classList.add('active');
+                
+                // Reset and trigger animations for content elements
+                const content = page.querySelector('.content');
+                if (content) {
+                    content.style.animation = 'none';
+                    content.offsetHeight;
+                    content.style.animation = 'contentFadeIn 1s ease-out 0.3s forwards';
+                }
+                
+                // Reset and trigger animations for headline
+                const headline = page.querySelector('.headline');
+                if (headline) {
+                    headline.style.animation = 'none';
+                    headline.offsetHeight;
+                    headline.style.animation = 'textFadeIn 1s ease-out 0.5s forwards';
+                }
+                
+                // Reset and trigger animations for description
+                const description = page.querySelector('.description');
+                if (description) {
+                    description.style.animation = 'none';
+                    description.offsetHeight;
+                    description.style.animation = 'textFadeIn 1s ease-out 0.7s forwards';
+                }
+                
+                // Reset and trigger animations for buttons
+                const buttonContainer = page.querySelector('.button-container');
+                if (buttonContainer) {
+                    buttonContainer.style.animation = 'none';
+                    buttonContainer.offsetHeight;
+                    buttonContainer.style.animation = 'buttonsFadeIn 1s ease-out 0.9s forwards';
+                }
+                
+                // Reset and trigger animations for individual buttons
+                const buttons = page.querySelectorAll('.btn');
+                buttons.forEach((btn, index) => {
+                    btn.style.animation = 'none';
+                    btn.offsetHeight;
+                    btn.style.animation = `buttonFadeIn 0.8s ease-out ${1 + (index * 0.2)}s forwards`;
+                });
+                
+                // Reset and trigger animations for search bar
+                const searchContainer = page.querySelector('.search-container');
+                if (searchContainer) {
+                    searchContainer.style.animation = 'none';
+                    searchContainer.offsetHeight;
+                    searchContainer.style.animation = 'searchFadeIn 0.8s ease-out 0.6s forwards';
+                }
+                
+                // Reset and trigger animations for arrows if on gallery page
+                if (page.id === 'gallery-page') {
+                    [prevPage, nextPage].forEach(arrow => {
+                        arrow.style.animation = 'none';
+                        arrow.offsetHeight;
+                        arrow.style.animation = 'arrowFadeIn 0.8s ease-out 0.5s forwards';
+                    });
+                    
+                    // Clear search when entering gallery page but preserve language
+                    const currentLang = appData.currentLanguage;
+                    searchBar.value = '';
+                    clearSearchBtn.style.display = 'none';
+                    isSearching = false;
+                    currentPage = 1;
+                    
+                    // Clear cache to force refresh with current language
+                    cachedItems = null;
+                    cachedLanguage = null;
+                    cachedSearchTerm = null;
+                    
+                    setTimeout(() => {
+                        renderGallery();
+                    }, 300);
+                }
+            }
+            
+            // Render the gallery based on current page and search
+            function renderGallery() {
+                const searchTerm = searchBar ? searchBar.value : '';
+                const items = getFilteredItems(searchTerm);
+                
+                const desktopGallery = document.getElementById('desktop-gallery');
+                const mobileGallery = document.getElementById('mobile-gallery');
+                const pagination = document.getElementById('pagination');
+                
+                if (!desktopGallery || !mobileGallery || !pagination) return;
+                
+                // Clear existing content
+                desktopGallery.innerHTML = '';
+                mobileGallery.innerHTML = '';
+                pagination.innerHTML = '';
+                
+                // Show/hide no results message
+                if (items.length === 0) {
+                    if (noResultsMsg) {
+                        noResultsMsg.style.display = 'block';
+                    }
+                    desktopGallery.style.display = 'none';
+                    mobileGallery.style.display = 'none';
+                    pagination.style.display = 'none';
+                    return;
+                } else {
+                    if (noResultsMsg) {
+                        noResultsMsg.style.display = 'none';
+                    }
+                    desktopGallery.style.display = 'grid';
+                    mobileGallery.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+                }
+                
+                // Calculate total pages
+                const totalItems = items.length;
+                const totalPagesDesktop = Math.ceil(totalItems / itemsPerPageDesktop);
+                
+                // Ensure currentPage is within valid range
+                if (currentPage < 1) currentPage = 1;
+                if (currentPage > totalPagesDesktop) currentPage = totalPagesDesktop;
+                
+                // Get date label based on language
+                const dateLabel = appData.currentLanguage === 'en' ? 'Missing since:' : 'مفقود شده از:';
+                
+                // For desktop: show 3 persons per page
+                const startIndexDesktop = (currentPage - 1) * itemsPerPageDesktop;
+                const endIndexDesktop = Math.min(startIndexDesktop + itemsPerPageDesktop, totalItems);
+                
+                for (let i = startIndexDesktop; i < endIndexDesktop; i++) {
+                    const item = items[i];
+                    if (!item) continue;
+                    
+                    const link = parseLink(item.link);
+                    
+                    const personCard = document.createElement('div');
+                    personCard.className = 'person-card';
+                    personCard.style.animationDelay = `${0.5 + (i - startIndexDesktop) * 0.1}s`;
+                    
+                    // Create name with link and priority star
+                    const displayName = item.displayName || 'Unknown';
+                    const priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
+                    
+                    personCard.innerHTML = `
+                        <img src="${item.photo || 'images/placeholder.jpg'}" alt="${displayName}" class="person-photo">
+                        <div class="person-info">
+                            <div class="person-name">
+                                <a href="${link}" target="_blank" rel="noopener noreferrer">${displayName}${priorityStar}</a>
+                            </div>
+                            <div class="person-date">${dateLabel} ${item.date || 'Unknown'}</div>
+                        </div>
+                    `;
+                    desktopGallery.appendChild(personCard);
+                    
+                    // Add error handling for local images
+                    const img = personCard.querySelector('.person-photo');
+                    if (img) {
+                        handleMissingImage(img, item.index || 0);
+                    }
+                }
+                
+                // For mobile: show all persons in vertical layout
+                for (let i = 0; i < totalItems; i++) {
+                    const item = items[i];
+                    if (!item) continue;
+                    
+                    const link = parseLink(item.link);
+                    
+                    const personCard = document.createElement('div');
+                    personCard.className = 'mobile-person-card';
+                    personCard.style.animationDelay = `${0.4 + (i % 6) * 0.1}s`;
+                    
+                    // Create name with link and priority star
+                    const displayName = item.displayName || 'Unknown';
+                    const priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
+                    
+                    personCard.innerHTML = `
+                        <img src="${item.photo || 'images/placeholder.jpg'}" alt="${displayName}" class="mobile-person-photo">
+                        <div class="mobile-person-info">
+                            <div class="mobile-person-name">
+                                <a href="${link}" target="_blank" rel="noopener noreferrer">${displayName}${priorityStar}</a>
+                            </div>
+                            <div class="mobile-person-date">${dateLabel} ${item.date || 'Unknown'}</div>
+                        </div>
+                    `;
+                    mobileGallery.appendChild(personCard);
+                    
+                    // Add error handling for local images
+                    const img = personCard.querySelector('.mobile-person-photo');
+                    if (img) {
+                        handleMissingImage(img, item.index || 0);
+                    }
+                }
+                
+                // Create pagination indicators for desktop
+                if (window.innerWidth > 768) {
+                    for (let i = 1; i <= totalPagesDesktop; i++) {
+                        const indicator = document.createElement('div');
+                        indicator.className = `page-indicator ${i === currentPage ? 'active' : ''}`;
+                        indicator.dataset.page = i;
+                        indicator.style.animationDelay = `${0.8 + i * 0.05}s`;
+                        indicator.addEventListener('click', function() {
+                            currentPage = parseInt(this.dataset.page);
+                            renderGallery();
+                        });
+                        pagination.appendChild(indicator);
+                    }
+                    pagination.style.display = 'flex';
+                    pagination.style.direction = 'ltr'; // Force LTR direction
+                } else {
+                    pagination.style.display = 'none';
+                }
+                
+                // Trigger animations for newly created elements
+                setTimeout(() => {
+                    const cards = document.querySelectorAll('.person-card, .mobile-person-card');
+                    cards.forEach(card => {
+                        card.style.animation = 'none';
+                        card.offsetHeight;
+                        card.style.animation = `cardFadeIn 0.8s ease-out ${card.style.animationDelay} forwards`;
+                    });
+                    
+                    const indicators = document.querySelectorAll('.page-indicator');
+                    indicators.forEach(indicator => {
+                        indicator.style.animation = 'none';
+                        indicator.offsetHeight;
+                        indicator.style.animation = `fadeIn 0.8s ease-out ${indicator.style.animationDelay} forwards`;
+                    });
+                }, 50);
+            }
+            
+            // Search functionality
+            if (searchBar) {
+                searchBar.addEventListener('input', function() {
+                    currentPage = 1;
+                    
+                    // Show/hide clear button
+                    if (this.value.trim() !== '') {
+                        clearSearchBtn.style.display = 'block';
+                    } else {
+                        clearSearchBtn.style.display = 'none';
+                    }
+                    
+                    // Clear cache to force re-filter
+                    cachedSearchTerm = null;
+                    cachedItems = null;
+                    
+                    // Debounce the search to avoid too many re-renders
+                    clearTimeout(this.searchTimeout);
+                    this.searchTimeout = setTimeout(() => {
+                        renderGallery();
+                    }, 300);
+                });
+            }
+            
+            // Clear search button functionality
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener('click', function() {
+                    if (searchBar) {
+                        searchBar.value = '';
+                    }
+                    clearSearchBtn.style.display = 'none';
+                    currentPage = 1;
+                    
+                    // Clear cache
+                    cachedSearchTerm = null;
+                    cachedItems = null;
+                    
+                    renderGallery();
+                    if (searchBar) {
+                        searchBar.focus();
+                    }
+                });
+            }
+            
+            // Event listeners for navigation
+            if (btnPage2) btnPage2.addEventListener('click', () => showPage(secondPage));
+            if (btnOther) {
+                btnOther.addEventListener('click', () => {
+                    const message = appData.currentLanguage === 'en' 
+                        ? 'This would navigate to the report page in a complete implementation.'
+                        : 'این شما را به صفحه گزارش در یک پیاده سازی کامل هدایت می کند.';
+                    alert(message);
+                });
+            }
+            if (btnLostPersons) {
+                btnLostPersons.addEventListener('click', () => {
+                    currentPage = 1;
+                    showPage(galleryPage);
+                });
+            }
+            if (btnCategory2) {
+                btnCategory2.addEventListener('click', () => {
+                    const message = appData.currentLanguage === 'en' 
+                        ? 'Category 2 selected'
+                        : 'دسته ۲ انتخاب شد';
+                    alert(message);
+                });
+            }
+            if (btnCategory3) {
+                btnCategory3.addEventListener('click', () => {
+                    const message = appData.currentLanguage === 'en' 
+                        ? 'Category 3 selected'
+                        : 'دسته ۳ انتخاب شد';
+                    alert(message);
+                });
+            }
+            if (backToFront) backToFront.addEventListener('click', () => showPage(frontPage));
+            if (backToSecond) backToSecond.addEventListener('click', () => showPage(secondPage));
+            
+            // Gallery navigation - FIXED: Circular navigation works correctly in both languages
+            if (prevPage) {
+                prevPage.addEventListener('click', () => {
+                    const searchTerm = searchBar ? searchBar.value : '';
+                    const items = getFilteredItems(searchTerm);
+                    const totalItems = items.length;
+                    const totalPages = Math.ceil(totalItems / itemsPerPageDesktop);
+                    
+                    if (totalPages > 0) {
+                        if (currentPage > 1) {
+                            currentPage--;
+                        } else {
+                            // If on first page, go to last page
+                            currentPage = totalPages;
+                        }
+                        renderGallery();
+                    }
+                });
+            }
+            
+            if (nextPage) {
+                nextPage.addEventListener('click', () => {
+                    const searchTerm = searchBar ? searchBar.value : '';
+                    const items = getFilteredItems(searchTerm);
+                    const totalItems = items.length;
+                    const totalPages = Math.ceil(totalItems / itemsPerPageDesktop);
+                    
+                    if (totalPages > 0) {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                        } else {
+                            // If on last page, go to first page
+                            currentPage = 1;
+                        }
+                        renderGallery();
+                    }
+                });
+            }
+            
+            // Handle window resize to update gallery layout
+            window.addEventListener('resize', function() {
+                renderGallery();
+            });
+            
+            // Initial animation for front page
+            setTimeout(() => {
+                const content = frontPage.querySelector('.content');
+                if (content) {
+                    content.style.animation = 'contentFadeIn 1s ease-out 0.3s forwards';
+                }
+                
+                const headline = frontPage.querySelector('.headline');
+                if (headline) {
+                    headline.style.animation = 'textFadeIn 1s ease-out 0.5s forwards';
+                }
+                
+                const description = frontPage.querySelector('.description');
+                if (description) {
+                    description.style.animation = 'textFadeIn 1s ease-out 0.7s forwards';
+                }
+                
+                const buttonContainer = frontPage.querySelector('.button-container');
+                if (buttonContainer) {
+                    buttonContainer.style.animation = 'buttonsFadeIn 1s ease-out 0.9s forwards';
+                }
+                
+                const buttons = frontPage.querySelectorAll('.btn');
+                buttons.forEach((btn, index) => {
+                    btn.style.animation = `buttonFadeIn 0.8s ease-out ${1 + (index * 0.2)}s forwards`;
+                });
+            }, 100);
+            
+            // Initial render
+            setTimeout(() => {
+                renderGallery();
+            }, 200);
+        });
+    </script>
+</body>
+</html>
