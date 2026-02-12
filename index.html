@@ -143,13 +143,13 @@
         /* Second Page - Same as front page */
         #second-page {
             /* REPLACE THIS URL WITH YOUR Photo 1 */
-            background-image: url('path/to/your/photo1.jpg');
+            background-image: url('assets/lionsword.JPEG');
         }
 
         /* Gallery Page - Desktop (Photo 4) */
         #gallery-page {
             /* REPLACE THIS URL WITH YOUR Photo 4 */
-            background-image: url('path/to/your/photo4.jpg');
+            background-image: url('assets/photo4.jpg');
         }
 
         /* Mobile Backgrounds */
@@ -163,7 +163,7 @@
             /* Gallery Page - Mobile (Photo 5) */
             #gallery-page {
                 /* REPLACE THIS URL WITH YOUR Photo 5 */
-                background-image: url('path/to/your/photo5.jpg') !important;
+                background-image: url('assets/photo5.jpg') !important;
             }
         }
 
@@ -171,7 +171,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.363); /* Reduced opacity */
+            background-color: rgba(255, 255, 255, 0.363);
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0);
             min-height: calc(100vh - 40px);
@@ -180,7 +180,7 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            animation: contentFadeIn 1s ease-out 0.3s forwards; /* Delayed fade-in */
+            animation: contentFadeIn 1s ease-out 0.3s forwards;
         }
 
         @keyframes contentFadeIn {
@@ -239,7 +239,7 @@
             width: 100%;
             justify-content: center;
             opacity: 0;
-            animation: buttonsFadeIn 1s ease-out 0.9s forwards; /* Delayed animation */
+            animation: buttonsFadeIn 1s ease-out 0.9s forwards;
         }
 
         @keyframes buttonsFadeIn {
@@ -272,14 +272,14 @@
         .btn-primary {
             background-color: #5e0808;
             color: white;
-            animation-delay: 1s; /* Staggered animation for buttons */
+            animation-delay: 1s;
         }
 
         .btn-secondary {
             background-color: #bd3232;
             color: #ffffff;
             border: 2px solid #dddddd00;
-            animation-delay: 1.2s; /* Staggered animation for buttons */
+            animation-delay: 1.2s;
         }
 
         @keyframes buttonFadeIn {
@@ -415,7 +415,7 @@
         }
 
         .person-card {
-            background-color: rgba(255, 255, 255, 0.85); /* Reduced opacity */
+            background-color: rgba(255, 255, 255, 0.85);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(214, 8, 8, 0.1);
@@ -505,7 +505,7 @@
         }
 
         .mobile-person-card {
-            background-color: rgba(255, 255, 255, 0.85); /* Reduced opacity */
+            background-color: rgba(255, 255, 255, 0.85);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -570,7 +570,7 @@
             transform: translateY(-50%);
             width: 70px;
             height: 70px;
-            color: rgba(255, 255, 255, 0.9); /* White color with transparency */
+            color: rgba(255, 255, 255, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -579,9 +579,9 @@
             border-radius: 50%;
             transition: all 0.3s ease;
             z-index: 100;
-            opacity: 1 !important; /* Always visible */
+            opacity: 1 !important;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            background-color: transparent !important; /* No background */
+            background-color: transparent !important;
             animation: arrowFadeIn 0.8s ease-out 1s forwards;
         }
 
@@ -597,7 +597,7 @@
         }
 
         .nav-arrow:hover {
-            color: rgba(255, 255, 255, 1); /* Brighter white on hover */
+            color: rgba(255, 255, 255, 1);
             text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
             transform: translateY(-50%) scale(1.1);
         }
@@ -610,7 +610,7 @@
             right: 20px;
         }
 
-        /* Pagination indicator - FIXED: Always LTR orientation for both languages */
+        /* Pagination indicator - Always LTR orientation for both languages */
         .pagination {
             display: flex;
             justify-content: center;
@@ -618,7 +618,7 @@
             gap: 10px;
             opacity: 0;
             animation: fadeIn 0.8s ease-out 0.8s forwards;
-            direction: ltr !important; /* Force LTR for pagination regardless of language */
+            direction: ltr !important;
         }
 
         @keyframes fadeIn {
@@ -653,7 +653,7 @@
             top: 20px;
             left: 20px;
             padding: 10px 20px;
-            background-color: rgba(255, 255, 255, 0.85); /* Reduced opacity */
+            background-color: rgba(255, 255, 255, 0.85);
             border: 1px solid #ddd;
             border-radius: 5px;
             cursor: pointer;
@@ -684,7 +684,6 @@
                 min-width: 160px;
             }
             
-            /* Adjust arrow size for medium screens */
             .nav-arrow {
                 width: 60px;
                 height: 60px;
@@ -716,7 +715,7 @@
             
             .content {
                 padding: 15px;
-                background-color: rgba(255, 255, 255, 0.8); /* Slightly more opaque on mobile */
+                background-color: rgba(255, 255, 255, 0.8);
             }
             
             .headline {
@@ -743,16 +742,14 @@
                 font-size: 2rem;
             }
             
-            /* Switch to mobile gallery on smaller screens */
             .desktop-gallery {
                 display: none;
             }
             
             .mobile-gallery {
-                display: flex;
+                display: flex !important;
             }
             
-            /* Hide navigation arrows on mobile */
             .nav-arrow {
                 display: none;
             }
@@ -836,7 +833,7 @@
         <div class="content">
             <h1 class="headline" data-en="List Of People In Custody and In Danger of Death penalty In Iran" data-fa="لیست افراد بازداشت شده و در خطر اعدام">List Of People In Custody and In Danger of Death penalty In Iran</h1>
             <p class="description" data-en="These lists are gathered from reliable sources, Mostly from families across social media platforms such as X, Telegram and Instagram." 
-               data-fa="تهیه این لیست ها از طریق منابع موثق و قابل اطمینان صورت گرفته است که اکثر نام ها  توسط خانداده ها در پلتفرم های ایکس، تلگرام و اینستاگرام انتشار یافته اند.">
+               data-fa="تهیه این لیست ها از طریق منابع موثق و قابل اطمینان صورت گرفته است که اکثر نام ها توسط خانداده ها در پلتفرم های ایکس، تلگرام و اینستاگرام انتشار یافته اند.">
                 These lists are gathered from reliable sources, Mostly from families across social media platforms such as X, Telegram and Instagram.
             </p>
             <div class="button-container">
@@ -900,7 +897,7 @@
                 <!-- Content will be populated by JavaScript -->
             </div>
             
-            <!-- Pagination indicators (desktop only) - direction forced to LTR in CSS -->
+            <!-- Pagination indicators (desktop only) -->
             <div class="pagination" id="pagination">
                 <!-- Content will be populated by JavaScript -->
             </div>
@@ -909,23 +906,12 @@
 
     <script>
         // ============================================
-        // INSTRUCTIONS FOR ADDING YOUR LOCAL FILES
+        // FIXED: Language Switching Works Immediately
         // ============================================
         
-        // 1. CREATE A FOLDER STRUCTURE:
-        //    - Create a folder named "images" in the same directory as this HTML file
-        //    - Place your photos in the "images" folder with these names:
-        //        1.jpeg, 2.jpeg, 3.jpeg, etc. (match the numbers to names)
-        
-        // 2. REPLACE BACKGROUND IMAGES IN THE CSS SECTION ABOVE:
-        //    - Look for the CSS section marked "BACKGROUND IMAGES"
-        //    - Replace the URLs with your local file paths
-        
-        // 3. REPLACE THE SAMPLE DATA BELOW with your actual data files
-        
         // Multi-language data structure
-        const appData = {
-            currentLanguage: 'en', // Default language
+        var appData = {
+            currentLanguage: 'en',
             languages: {
                 en: {
                     name: "English",
@@ -940,10 +926,7 @@
             },
             
             lostPersons: {
-                // ============================================
-                // NAMES FILE CONTENT - English
-                // Format: "1. Name" - Add * for priority (e.g., "1. * John Mayer")
-                // ============================================
+                // English names
                 names_en: [
                     "1. * John Mayer",
                     "2. Sarah Johnson", 
@@ -959,11 +942,7 @@
                     "12. Amelia Anderson"
                 ],
                 
-                // ============================================
-                // NAMES FILE CONTENT - Persian (Farsi)
-                // Add Persian names here matching the English names
-                // Add * for priority (e.g., "1. * جان مایر")
-                // ============================================
+                // Persian names
                 names_fa: [
                     "1. * جان مایر",
                     "2. سارا جانسون",
@@ -979,9 +958,7 @@
                     "12. آملیا اندرسون"
                 ],
                 
-                // ============================================
-                // DATES FILE CONTENT - English
-                // ============================================
+                // English dates
                 dates_en: [
                     "1. Jan 15, 2023",
                     "2. Feb 3, 2023",
@@ -997,30 +974,23 @@
                     "12. Dec 9, 2023"
                 ],
                 
-                // ============================================
-                // DATES FILE CONTENT - Persian (Jalali dates)
-                // Add Persian dates here matching the English dates
-                // ============================================
+                // Persian dates
                 dates_fa: [
-                    "1. دی ۲۵، ۱۴۰۱",
-                    "2. بهمن ۱۴، ۱۴۰۱",
-                    "3. فروردین ۲، ۱۴۰۲",
-                    "4. فروردین ۲۱، ۱۴۰۲",
-                    "5. اردیبهشت ۱۵، ۱۴۰۲",
-                    "6. خرداد ۲۸، ۱۴۰۲",
-                    "7. تیر ۱۶، ۱۴۰۲",
-                    "8. شهریور ۷، ۱۴۰۲",
-                    "9. شهریور ۲۳، ۱۴۰۲",
-                    "10. مهر ۹، ۱۴۰۲",
-                    "11. آذر ۱، ۱۴۰۲",
-                    "12. آذر ۱۸، ۱۴۰۲"
+                    "1. دی 25، 1401",
+                    "2. بهمن 14، 1401",
+                    "3. فروردین 2، 1402",
+                    "4. فروردین 21، 1402",
+                    "5. اردیبهشت 15، 1402",
+                    "6. خرداد 28، 1402",
+                    "7. تیر 16، 1402",
+                    "8. شهریور 7، 1402",
+                    "9. شهریور 23، 1402",
+                    "10. مهر 9، 1402",
+                    "11. آذر 1، 1402",
+                    "12. آذر 18، 1402"
                 ],
                 
-                // ============================================
-                // LINKS FILE CONTENT - URL sources for each person
-                // Format: "1. https://example.com/person1"
-                // These will be used as clickable links on the names
-                // ============================================
+                // English links
                 links_en: [
                     "1. https://twitter.com/example1",
                     "2. https://twitter.com/example2",
@@ -1036,6 +1006,7 @@
                     "12. https://twitter.com/example12"
                 ],
                 
+                // Persian links
                 links_fa: [
                     "1. https://twitter.com/example1",
                     "2. https://twitter.com/example2",
@@ -1051,10 +1022,7 @@
                     "12. https://twitter.com/example12"
                 ],
                 
-                // ============================================
-                // LOCAL IMAGE FILES
-                // Replace these with your local image paths
-                // ============================================
+                // Local image files
                 photos: [
                     "images/1.jpeg",
                     "images/2.jpeg", 
@@ -1072,74 +1040,78 @@
             }
         };
 
-        // Global variables for search functionality
-        let currentPage = 1;
-        let isSearching = false;
-        const itemsPerPageDesktop = 3;
-        const itemsPerPageMobile = 2;
+        // Global variables
+        var currentPage = 1;
+        var isSearching = false;
+        var itemsPerPageDesktop = 3;
+        var itemsPerPageMobile = 2;
         
-        // Cache for current language items to prevent recalculation
-        let cachedItems = null;
-        let cachedLanguage = null;
-        let cachedSearchTerm = null;
+        // Cache
+        var cachedItems = null;
+        var cachedLanguage = null;
+        var cachedSearchTerm = null;
 
-        // Function to handle missing images
+        // Helper function to check if mobile
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        // Handle missing images
         function handleMissingImage(imgElement, index) {
             imgElement.onerror = function() {
-                console.warn(`Image ${appData.lostPersons.photos[index]} not found. Using placeholder.`);
-                this.src = `https://via.placeholder.com/300x400/1a5a7a/ffffff?text=Person+${index+1}`;
-                this.alt = `Placeholder for ${appData.lostPersons.names_en[index]}`;
+                console.warn("Image not found, using placeholder");
+                this.src = "https://via.placeholder.com/300x400/1a5a7a/ffffff?text=Person+" + (index + 1);
+                this.alt = "Placeholder";
             };
         }
 
-        // Language switching function - FIXED: Force re-render with correct language data
+        // FIXED: Language switching - IMMEDIATE update
         function switchLanguage(lang) {
             appData.currentLanguage = lang;
-            const langData = appData.languages[lang];
+            var langData = appData.languages[lang];
             
             // Update HTML direction
             document.body.dir = langData.dir;
             document.documentElement.lang = lang;
             
             // Update language toggle button
-            const toggleBtn = document.getElementById('language-toggle');
-            const flagSpan = toggleBtn.querySelector('.language-flag');
-            const textSpan = toggleBtn.querySelector('.language-text');
+            var toggleBtn = document.getElementById('language-toggle');
+            var flagSpan = toggleBtn.querySelector('.language-flag');
+            var textSpan = toggleBtn.querySelector('.language-text');
             
             flagSpan.textContent = langData.flag;
             textSpan.textContent = lang === 'en' ? 'فارسی' : 'English';
             
-            // Update all elements with data attributes
+            // Update all text elements
             updateTextElements();
             
             // Update search bar placeholder
-            const searchBar = document.getElementById('search-bar');
+            var searchBar = document.getElementById('search-bar');
             if (searchBar) {
                 searchBar.placeholder = lang === 'en' 
                     ? searchBar.getAttribute('data-en-placeholder') 
                     : searchBar.getAttribute('data-fa-placeholder');
             }
             
-            // Clear cache to force refresh with new language
+            // CRITICAL: Force clear cache and reset to page 1
             cachedItems = null;
             cachedLanguage = null;
             cachedSearchTerm = null;
-            
-            // Reset to first page
             currentPage = 1;
             
-            // Re-render gallery with current language - IMMEDIATELY
+            // Force immediate re-render
             renderGallery();
             
-            // Save language preference to localStorage
+            // Save preference
             localStorage.setItem('preferredLanguage', lang);
         }
 
-        // Update all text elements based on current language
+        // Update text elements
         function updateTextElements() {
-            const elements = document.querySelectorAll('[data-en], [data-fa]');
+            var elements = document.querySelectorAll('[data-en], [data-fa]');
             
-            elements.forEach(element => {
+            for (var i = 0; i < elements.length; i++) {
+                var element = elements[i];
                 if (appData.currentLanguage === 'en') {
                     if (element.hasAttribute('data-en')) {
                         if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
@@ -1157,63 +1129,57 @@
                         }
                     }
                 }
-            });
+            }
         }
 
-        // Parse name to check for priority star and clean name
+        // Parse name
         function parseName(nameString) {
-            const hasPriority = nameString.includes('*');
-            // Remove the "*" and any extra spaces
-            let cleanName = nameString.replace('*', '').replace(/\s+/g, ' ').trim();
+            var hasPriority = nameString.indexOf('*') !== -1;
+            var cleanName = nameString.replace('*', '').replace(/\s+/g, ' ').trim();
             return {
                 displayName: cleanName,
-                hasPriority: hasPriority,
-                originalName: nameString
+                hasPriority: hasPriority
             };
         }
 
-        // Parse link from link string
+        // Parse link
         function parseLink(linkString) {
             if (!linkString) return '#';
-            const match = linkString.match(/\d+\.\s*(.+)/);
+            var match = linkString.match(/\d+\.\s*(.+)/);
             return match ? match[1] : linkString;
         }
 
-        // Get current language data with priority sorting - FIXED: Always returns fresh sorted data
+        // Get current data with priority sorting
         function getCurrentData() {
-            const lang = appData.currentLanguage;
+            var lang = appData.currentLanguage;
             
-            // Get arrays for current language
-            const nameArray = appData.lostPersons[`names_${lang}`] || appData.lostPersons.names_en;
-            const dateArray = appData.lostPersons[`dates_${lang}`] || appData.lostPersons.dates_en;
-            const linkArray = appData.lostPersons[`links_${lang}`] || appData.lostPersons.links_en;
-            const photosArray = appData.lostPersons.photos;
+            var nameArray = appData.lostPersons["names_" + lang] || appData.lostPersons.names_en;
+            var dateArray = appData.lostPersons["dates_" + lang] || appData.lostPersons.dates_en;
+            var linkArray = appData.lostPersons["links_" + lang] || appData.lostPersons.links_en;
+            var photosArray = appData.lostPersons.photos;
             
-            // Create array of objects with all data
-            const combined = nameArray.map((name, index) => {
-                const parsed = parseName(name);
-                // Make sure we have valid data for each index
-                const date = dateArray[index] || `${index + 1}. Date Unknown`;
-                const link = linkArray[index] || `${index + 1}. #`;
-                const photo = photosArray[index] || "images/placeholder.jpg";
+            var combined = [];
+            
+            for (var i = 0; i < nameArray.length; i++) {
+                var parsed = parseName(nameArray[i]);
+                var date = dateArray[i] || (i + 1 + ". Date Unknown");
+                var link = linkArray[i] || (i + 1 + ". #");
+                var photo = photosArray[i] || "images/placeholder.jpg";
                 
-                return {
-                    originalName: name,
+                combined.push({
                     displayName: parsed.displayName,
                     hasPriority: parsed.hasPriority,
                     date: date,
                     link: link,
                     photo: photo,
-                    index: index
-                };
-            });
+                    index: i
+                });
+            }
             
-            // Sort: priority first (those with *), then others
-            combined.sort((a, b) => {
-                // Priority items come first
+            // Sort: priority first
+            combined.sort(function(a, b) {
                 if (a.hasPriority && !b.hasPriority) return -1;
                 if (!a.hasPriority && b.hasPriority) return 1;
-                // If both have priority or both don't, keep original order
                 return 0;
             });
             
@@ -1222,23 +1188,28 @@
             };
         }
 
-        // Get filtered items based on search term - WITH CACHING for performance
+        // Get filtered items
         function getFilteredItems(searchTerm) {
-            const currentLang = appData.currentLanguage;
+            var currentLang = appData.currentLanguage;
             
-            // If language changed or search term changed, recalculate
             if (cachedLanguage !== currentLang || cachedSearchTerm !== searchTerm || cachedItems === null) {
-                const currentData = getCurrentData();
-                const allItems = currentData.items;
+                var currentData = getCurrentData();
+                var allItems = currentData.items;
                 
                 if (!searchTerm || searchTerm.trim() === '') {
                     cachedItems = allItems;
                     isSearching = false;
                 } else {
-                    const term = searchTerm.toLowerCase().trim();
-                    cachedItems = allItems.filter(item => 
-                        item.displayName.toLowerCase().includes(term)
-                    );
+                    var term = searchTerm.toLowerCase().trim();
+                    var filtered = [];
+                    
+                    for (var i = 0; i < allItems.length; i++) {
+                        if (allItems[i].displayName.toLowerCase().indexOf(term) !== -1) {
+                            filtered.push(allItems[i]);
+                        }
+                    }
+                    
+                    cachedItems = filtered;
                     isSearching = true;
                 }
                 
@@ -1249,380 +1220,229 @@
             return cachedItems;
         }
 
+        // FIXED: Render gallery - works on both desktop and mobile
+        function renderGallery() {
+            var searchTerm = document.getElementById('search-bar') ? document.getElementById('search-bar').value : '';
+            var items = getFilteredItems(searchTerm);
+            
+            var desktopGallery = document.getElementById('desktop-gallery');
+            var mobileGallery = document.getElementById('mobile-gallery');
+            var pagination = document.getElementById('pagination');
+            var noResultsMsg = document.getElementById('no-results');
+            
+            if (!desktopGallery || !mobileGallery || !pagination) return;
+            
+            // Clear existing content
+            desktopGallery.innerHTML = '';
+            mobileGallery.innerHTML = '';
+            pagination.innerHTML = '';
+            
+            // Show/hide no results
+            if (items.length === 0) {
+                if (noResultsMsg) noResultsMsg.style.display = 'block';
+                desktopGallery.style.display = 'none';
+                mobileGallery.style.display = 'none';
+                pagination.style.display = 'none';
+                return;
+            } else {
+                if (noResultsMsg) noResultsMsg.style.display = 'none';
+                
+                // CRITICAL FIX: Set display based on screen size
+                var mobile = isMobile();
+                desktopGallery.style.display = mobile ? 'none' : 'grid';
+                mobileGallery.style.display = mobile ? 'flex' : 'none';
+            }
+            
+            var totalItems = items.length;
+            var totalPagesDesktop = Math.ceil(totalItems / itemsPerPageDesktop);
+            
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPagesDesktop) currentPage = totalPagesDesktop;
+            
+            var dateLabel = appData.currentLanguage === 'en' ? 'Missing since:' : 'مفقود شده از:';
+            
+            // Desktop gallery (3 per page)
+            var startIndexDesktop = (currentPage - 1) * itemsPerPageDesktop;
+            var endIndexDesktop = Math.min(startIndexDesktop + itemsPerPageDesktop, totalItems);
+            
+            for (var i = startIndexDesktop; i < endIndexDesktop; i++) {
+                var item = items[i];
+                if (!item) continue;
+                
+                var link = parseLink(item.link);
+                var displayName = item.displayName || 'Unknown';
+                var priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
+                
+                var personCard = document.createElement('div');
+                personCard.className = 'person-card';
+                personCard.style.animationDelay = (0.5 + (i - startIndexDesktop) * 0.1) + 's';
+                personCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="person-photo"><div class="person-info"><div class="person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="person-date">' + dateLabel + ' ' + (item.date || 'Unknown') + '</div></div>';
+                desktopGallery.appendChild(personCard);
+                
+                var img = personCard.querySelector('.person-photo');
+                if (img) handleMissingImage(img, item.index || 0);
+            }
+            
+            // FIXED: Mobile gallery - ALL items, not just current page
+            for (var j = 0; j < totalItems; j++) {
+                var mobileItem = items[j];
+                if (!mobileItem) continue;
+                
+                var mobileLink = parseLink(mobileItem.link);
+                var mobileName = mobileItem.displayName || 'Unknown';
+                var mobilePriorityStar = mobileItem.hasPriority ? '<span class="priority-star">*</span>' : '';
+                
+                var mobileCard = document.createElement('div');
+                mobileCard.className = 'mobile-person-card';
+                mobileCard.style.animationDelay = (0.4 + (j % 6) * 0.1) + 's';
+                mobileCard.innerHTML = '<img src="' + (mobileItem.photo || 'images/placeholder.jpg') + '" alt="' + mobileName + '" class="mobile-person-photo"><div class="mobile-person-info"><div class="mobile-person-name"><a href="' + mobileLink + '" target="_blank" rel="noopener noreferrer">' + mobileName + mobilePriorityStar + '</a></div><div class="mobile-person-date">' + dateLabel + ' ' + (mobileItem.date || 'Unknown') + '</div></div>';
+                mobileGallery.appendChild(mobileCard);
+                
+                var mobileImg = mobileCard.querySelector('.mobile-person-photo');
+                if (mobileImg) handleMissingImage(mobileImg, mobileItem.index || 0);
+            }
+            
+            // Pagination for desktop
+            if (!isMobile()) {
+                for (var p = 1; p <= totalPagesDesktop; p++) {
+                    var indicator = document.createElement('div');
+                    indicator.className = 'page-indicator' + (p === currentPage ? ' active' : '');
+                    indicator.dataset.page = p;
+                    indicator.style.animationDelay = (0.8 + p * 0.05) + 's';
+                    
+                    indicator.addEventListener('click', function() {
+                        currentPage = parseInt(this.dataset.page);
+                        renderGallery();
+                    });
+                    
+                    pagination.appendChild(indicator);
+                }
+                pagination.style.display = 'flex';
+                pagination.style.direction = 'ltr';
+            } else {
+                pagination.style.display = 'none';
+            }
+            
+            // Trigger animations
+            setTimeout(function() {
+                var cards = document.querySelectorAll('.person-card, .mobile-person-card');
+                for (var c = 0; c < cards.length; c++) {
+                    cards[c].style.animation = 'none';
+                    cards[c].offsetHeight;
+                    cards[c].style.animation = 'cardFadeIn 0.8s ease-out ' + cards[c].style.animationDelay + ' forwards';
+                }
+                
+                var indicators = document.querySelectorAll('.page-indicator');
+                for (var ind = 0; ind < indicators.length; ind++) {
+                    indicators[ind].style.animation = 'none';
+                    indicators[ind].offsetHeight;
+                    indicators[ind].style.animation = 'fadeIn 0.8s ease-out ' + indicators[ind].style.animationDelay + ' forwards';
+                }
+            }, 50);
+        }
+
         // Page navigation
         document.addEventListener('DOMContentLoaded', function() {
-            // Get all page elements
-            const frontPage = document.getElementById('front-page');
-            const secondPage = document.getElementById('second-page');
-            const galleryPage = document.getElementById('gallery-page');
+            var frontPage = document.getElementById('front-page');
+            var secondPage = document.getElementById('second-page');
+            var galleryPage = document.getElementById('gallery-page');
             
-            // Navigation buttons
-            const btnPage2 = document.getElementById('btn-page2');
-            const btnOther = document.getElementById('btn-other');
-            const btnLostPersons = document.getElementById('btn-lost-persons');
-            const btnCategory2 = document.getElementById('btn-category2');
-            const btnCategory3 = document.getElementById('btn-category3');
-            const backToFront = document.getElementById('back-to-front');
-            const backToSecond = document.getElementById('back-to-second');
+            var btnPage2 = document.getElementById('btn-page2');
+            var btnOther = document.getElementById('btn-other');
+            var btnLostPersons = document.getElementById('btn-lost-persons');
+            var btnCategory2 = document.getElementById('btn-category2');
+            var btnCategory3 = document.getElementById('btn-category3');
+            var backToFront = document.getElementById('back-to-front');
+            var backToSecond = document.getElementById('back-to-second');
             
-            // Gallery navigation
-            const prevPage = document.getElementById('prev-page');
-            const nextPage = document.getElementById('next-page');
+            var prevPage = document.getElementById('prev-page');
+            var nextPage = document.getElementById('next-page');
             
-            // Search elements
-            const searchBar = document.getElementById('search-bar');
-            const clearSearchBtn = document.getElementById('clear-search');
-            const noResultsMsg = document.getElementById('no-results');
+            var searchBar = document.getElementById('search-bar');
+            var clearSearchBtn = document.getElementById('clear-search');
+            var languageToggle = document.getElementById('language-toggle');
             
-            // Language toggle
-            const languageToggle = document.getElementById('language-toggle');
-            
-            // Load saved language preference
-            const savedLanguage = localStorage.getItem('preferredLanguage');
+            // Load saved language
+            var savedLanguage = localStorage.getItem('preferredLanguage');
             if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fa')) {
-                // Use setTimeout to ensure DOM is fully ready
-                setTimeout(() => {
+                setTimeout(function() {
                     switchLanguage(savedLanguage);
                 }, 10);
             }
             
-            // Language toggle event
+            // Language toggle
             languageToggle.addEventListener('click', function() {
-                const newLang = appData.currentLanguage === 'en' ? 'fa' : 'en';
+                var newLang = appData.currentLanguage === 'en' ? 'fa' : 'en';
                 switchLanguage(newLang);
             });
             
-            // Function to show a specific page with animation
+            // Show page function
             function showPage(page) {
-                // Hide all pages
-                document.querySelectorAll('.page').forEach(p => {
-                    p.classList.remove('active');
-                });
+                var allPages = document.querySelectorAll('.page');
+                for (var i = 0; i < allPages.length; i++) {
+                    allPages[i].classList.remove('active');
+                }
                 
-                // Reset animations for the new page
                 page.style.animation = 'none';
                 page.offsetHeight;
                 page.style.animation = 'pageFadeIn 0.8s ease-out forwards';
-                
-                // Show the requested page
                 page.classList.add('active');
                 
-                // Reset and trigger animations for content elements
-                const content = page.querySelector('.content');
-                if (content) {
-                    content.style.animation = 'none';
-                    content.offsetHeight;
-                    content.style.animation = 'contentFadeIn 1s ease-out 0.3s forwards';
-                }
-                
-                // Reset and trigger animations for headline
-                const headline = page.querySelector('.headline');
-                if (headline) {
-                    headline.style.animation = 'none';
-                    headline.offsetHeight;
-                    headline.style.animation = 'textFadeIn 1s ease-out 0.5s forwards';
-                }
-                
-                // Reset and trigger animations for description
-                const description = page.querySelector('.description');
-                if (description) {
-                    description.style.animation = 'none';
-                    description.offsetHeight;
-                    description.style.animation = 'textFadeIn 1s ease-out 0.7s forwards';
-                }
-                
-                // Reset and trigger animations for buttons
-                const buttonContainer = page.querySelector('.button-container');
-                if (buttonContainer) {
-                    buttonContainer.style.animation = 'none';
-                    buttonContainer.offsetHeight;
-                    buttonContainer.style.animation = 'buttonsFadeIn 1s ease-out 0.9s forwards';
-                }
-                
-                // Reset and trigger animations for individual buttons
-                const buttons = page.querySelectorAll('.btn');
-                buttons.forEach((btn, index) => {
-                    btn.style.animation = 'none';
-                    btn.offsetHeight;
-                    btn.style.animation = `buttonFadeIn 0.8s ease-out ${1 + (index * 0.2)}s forwards`;
-                });
-                
-                // Reset and trigger animations for search bar
-                const searchContainer = page.querySelector('.search-container');
-                if (searchContainer) {
-                    searchContainer.style.animation = 'none';
-                    searchContainer.offsetHeight;
-                    searchContainer.style.animation = 'searchFadeIn 0.8s ease-out 0.6s forwards';
-                }
-                
-                // Reset and trigger animations for arrows if on gallery page
                 if (page.id === 'gallery-page') {
-                    [prevPage, nextPage].forEach(arrow => {
-                        arrow.style.animation = 'none';
-                        arrow.offsetHeight;
-                        arrow.style.animation = 'arrowFadeIn 0.8s ease-out 0.5s forwards';
-                    });
-                    
-                    // Clear search when entering gallery page but preserve language
-                    const currentLang = appData.currentLanguage;
-                    searchBar.value = '';
-                    clearSearchBtn.style.display = 'none';
-                    isSearching = false;
+                    if (searchBar) {
+                        searchBar.value = '';
+                        clearSearchBtn.style.display = 'none';
+                    }
                     currentPage = 1;
-                    
-                    // Clear cache to force refresh with current language
                     cachedItems = null;
                     cachedLanguage = null;
                     cachedSearchTerm = null;
                     
-                    setTimeout(() => {
+                    setTimeout(function() {
                         renderGallery();
-                    }, 300);
+                    }, 50);
                 }
             }
             
-            // Render the gallery based on current page and search
-            function renderGallery() {
-                const searchTerm = searchBar ? searchBar.value : '';
-                const items = getFilteredItems(searchTerm);
-                
-                const desktopGallery = document.getElementById('desktop-gallery');
-                const mobileGallery = document.getElementById('mobile-gallery');
-                const pagination = document.getElementById('pagination');
-                
-                if (!desktopGallery || !mobileGallery || !pagination) return;
-                
-                // Clear existing content
-                desktopGallery.innerHTML = '';
-                mobileGallery.innerHTML = '';
-                pagination.innerHTML = '';
-                
-                // Show/hide no results message
-                if (items.length === 0) {
-                    if (noResultsMsg) {
-                        noResultsMsg.style.display = 'block';
-                    }
-                    desktopGallery.style.display = 'none';
-                    mobileGallery.style.display = 'none';
-                    pagination.style.display = 'none';
-                    return;
-                } else {
-                    if (noResultsMsg) {
-                        noResultsMsg.style.display = 'none';
-                    }
-                    desktopGallery.style.display = 'grid';
-                    mobileGallery.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
-                }
-                
-                // Calculate total pages
-                const totalItems = items.length;
-                const totalPagesDesktop = Math.ceil(totalItems / itemsPerPageDesktop);
-                
-                // Ensure currentPage is within valid range
-                if (currentPage < 1) currentPage = 1;
-                if (currentPage > totalPagesDesktop) currentPage = totalPagesDesktop;
-                
-                // Get date label based on language
-                const dateLabel = appData.currentLanguage === 'en' ? 'Missing since:' : 'مفقود شده از:';
-                
-                // For desktop: show 3 persons per page
-                const startIndexDesktop = (currentPage - 1) * itemsPerPageDesktop;
-                const endIndexDesktop = Math.min(startIndexDesktop + itemsPerPageDesktop, totalItems);
-                
-                for (let i = startIndexDesktop; i < endIndexDesktop; i++) {
-                    const item = items[i];
-                    if (!item) continue;
-                    
-                    const link = parseLink(item.link);
-                    
-                    const personCard = document.createElement('div');
-                    personCard.className = 'person-card';
-                    personCard.style.animationDelay = `${0.5 + (i - startIndexDesktop) * 0.1}s`;
-                    
-                    // Create name with link and priority star
-                    const displayName = item.displayName || 'Unknown';
-                    const priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
-                    
-                    personCard.innerHTML = `
-                        <img src="${item.photo || 'images/placeholder.jpg'}" alt="${displayName}" class="person-photo">
-                        <div class="person-info">
-                            <div class="person-name">
-                                <a href="${link}" target="_blank" rel="noopener noreferrer">${displayName}${priorityStar}</a>
-                            </div>
-                            <div class="person-date">${dateLabel} ${item.date || 'Unknown'}</div>
-                        </div>
-                    `;
-                    desktopGallery.appendChild(personCard);
-                    
-                    // Add error handling for local images
-                    const img = personCard.querySelector('.person-photo');
-                    if (img) {
-                        handleMissingImage(img, item.index || 0);
-                    }
-                }
-                
-                // For mobile: show all persons in vertical layout
-                for (let i = 0; i < totalItems; i++) {
-                    const item = items[i];
-                    if (!item) continue;
-                    
-                    const link = parseLink(item.link);
-                    
-                    const personCard = document.createElement('div');
-                    personCard.className = 'mobile-person-card';
-                    personCard.style.animationDelay = `${0.4 + (i % 6) * 0.1}s`;
-                    
-                    // Create name with link and priority star
-                    const displayName = item.displayName || 'Unknown';
-                    const priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
-                    
-                    personCard.innerHTML = `
-                        <img src="${item.photo || 'images/placeholder.jpg'}" alt="${displayName}" class="mobile-person-photo">
-                        <div class="mobile-person-info">
-                            <div class="mobile-person-name">
-                                <a href="${link}" target="_blank" rel="noopener noreferrer">${displayName}${priorityStar}</a>
-                            </div>
-                            <div class="mobile-person-date">${dateLabel} ${item.date || 'Unknown'}</div>
-                        </div>
-                    `;
-                    mobileGallery.appendChild(personCard);
-                    
-                    // Add error handling for local images
-                    const img = personCard.querySelector('.mobile-person-photo');
-                    if (img) {
-                        handleMissingImage(img, item.index || 0);
-                    }
-                }
-                
-                // Create pagination indicators for desktop
-                if (window.innerWidth > 768) {
-                    for (let i = 1; i <= totalPagesDesktop; i++) {
-                        const indicator = document.createElement('div');
-                        indicator.className = `page-indicator ${i === currentPage ? 'active' : ''}`;
-                        indicator.dataset.page = i;
-                        indicator.style.animationDelay = `${0.8 + i * 0.05}s`;
-                        indicator.addEventListener('click', function() {
-                            currentPage = parseInt(this.dataset.page);
-                            renderGallery();
-                        });
-                        pagination.appendChild(indicator);
-                    }
-                    pagination.style.display = 'flex';
-                    pagination.style.direction = 'ltr'; // Force LTR direction
-                } else {
-                    pagination.style.display = 'none';
-                }
-                
-                // Trigger animations for newly created elements
-                setTimeout(() => {
-                    const cards = document.querySelectorAll('.person-card, .mobile-person-card');
-                    cards.forEach(card => {
-                        card.style.animation = 'none';
-                        card.offsetHeight;
-                        card.style.animation = `cardFadeIn 0.8s ease-out ${card.style.animationDelay} forwards`;
-                    });
-                    
-                    const indicators = document.querySelectorAll('.page-indicator');
-                    indicators.forEach(indicator => {
-                        indicator.style.animation = 'none';
-                        indicator.offsetHeight;
-                        indicator.style.animation = `fadeIn 0.8s ease-out ${indicator.style.animationDelay} forwards`;
-                    });
-                }, 50);
-            }
-            
-            // Search functionality
-            if (searchBar) {
-                searchBar.addEventListener('input', function() {
-                    currentPage = 1;
-                    
-                    // Show/hide clear button
-                    if (this.value.trim() !== '') {
-                        clearSearchBtn.style.display = 'block';
-                    } else {
-                        clearSearchBtn.style.display = 'none';
-                    }
-                    
-                    // Clear cache to force re-filter
-                    cachedSearchTerm = null;
-                    cachedItems = null;
-                    
-                    // Debounce the search to avoid too many re-renders
-                    clearTimeout(this.searchTimeout);
-                    this.searchTimeout = setTimeout(() => {
-                        renderGallery();
-                    }, 300);
-                });
-            }
-            
-            // Clear search button functionality
-            if (clearSearchBtn) {
-                clearSearchBtn.addEventListener('click', function() {
-                    if (searchBar) {
-                        searchBar.value = '';
-                    }
-                    clearSearchBtn.style.display = 'none';
-                    currentPage = 1;
-                    
-                    // Clear cache
-                    cachedSearchTerm = null;
-                    cachedItems = null;
-                    
-                    renderGallery();
-                    if (searchBar) {
-                        searchBar.focus();
-                    }
-                });
-            }
-            
-            // Event listeners for navigation
-            if (btnPage2) btnPage2.addEventListener('click', () => showPage(secondPage));
+            // Event listeners
+            if (btnPage2) btnPage2.addEventListener('click', function() { showPage(secondPage); });
             if (btnOther) {
-                btnOther.addEventListener('click', () => {
-                    const message = appData.currentLanguage === 'en' 
-                        ? 'This would navigate to the report page in a complete implementation.'
-                        : 'این شما را به صفحه گزارش در یک پیاده سازی کامل هدایت می کند.';
+                btnOther.addEventListener('click', function() {
+                    var message = appData.currentLanguage === 'en' ? 'This would navigate to the report page.' : 'این شما را به صفحه گزارش هدایت می کند.';
                     alert(message);
                 });
             }
             if (btnLostPersons) {
-                btnLostPersons.addEventListener('click', () => {
+                btnLostPersons.addEventListener('click', function() {
                     currentPage = 1;
                     showPage(galleryPage);
                 });
             }
             if (btnCategory2) {
-                btnCategory2.addEventListener('click', () => {
-                    const message = appData.currentLanguage === 'en' 
-                        ? 'Category 2 selected'
-                        : 'دسته ۲ انتخاب شد';
+                btnCategory2.addEventListener('click', function() {
+                    var message = appData.currentLanguage === 'en' ? 'Category 2 selected' : 'دسته ۲ انتخاب شد';
                     alert(message);
                 });
             }
             if (btnCategory3) {
-                btnCategory3.addEventListener('click', () => {
-                    const message = appData.currentLanguage === 'en' 
-                        ? 'Category 3 selected'
-                        : 'دسته ۳ انتخاب شد';
+                btnCategory3.addEventListener('click', function() {
+                    var message = appData.currentLanguage === 'en' ? 'Category 3 selected' : 'دسته ۳ انتخاب شد';
                     alert(message);
                 });
             }
-            if (backToFront) backToFront.addEventListener('click', () => showPage(frontPage));
-            if (backToSecond) backToSecond.addEventListener('click', () => showPage(secondPage));
+            if (backToFront) backToFront.addEventListener('click', function() { showPage(frontPage); });
+            if (backToSecond) backToSecond.addEventListener('click', function() { showPage(secondPage); });
             
-            // Gallery navigation - FIXED: Circular navigation works correctly in both languages
+            // Navigation arrows
             if (prevPage) {
-                prevPage.addEventListener('click', () => {
-                    const searchTerm = searchBar ? searchBar.value : '';
-                    const items = getFilteredItems(searchTerm);
-                    const totalItems = items.length;
-                    const totalPages = Math.ceil(totalItems / itemsPerPageDesktop);
+                prevPage.addEventListener('click', function() {
+                    var items = getFilteredItems(searchBar ? searchBar.value : '');
+                    var totalPages = Math.ceil(items.length / itemsPerPageDesktop);
                     
                     if (totalPages > 0) {
                         if (currentPage > 1) {
                             currentPage--;
                         } else {
-                            // If on first page, go to last page
                             currentPage = totalPages;
                         }
                         renderGallery();
@@ -1631,17 +1451,14 @@
             }
             
             if (nextPage) {
-                nextPage.addEventListener('click', () => {
-                    const searchTerm = searchBar ? searchBar.value : '';
-                    const items = getFilteredItems(searchTerm);
-                    const totalItems = items.length;
-                    const totalPages = Math.ceil(totalItems / itemsPerPageDesktop);
+                nextPage.addEventListener('click', function() {
+                    var items = getFilteredItems(searchBar ? searchBar.value : '');
+                    var totalPages = Math.ceil(items.length / itemsPerPageDesktop);
                     
                     if (totalPages > 0) {
                         if (currentPage < totalPages) {
                             currentPage++;
                         } else {
-                            // If on last page, go to first page
                             currentPage = 1;
                         }
                         renderGallery();
@@ -1649,43 +1466,46 @@
                 });
             }
             
-            // Handle window resize to update gallery layout
+            // Search
+            if (searchBar) {
+                searchBar.addEventListener('input', function() {
+                    currentPage = 1;
+                    clearSearchBtn.style.display = this.value.trim() !== '' ? 'block' : 'none';
+                    cachedSearchTerm = null;
+                    cachedItems = null;
+                    
+                    clearTimeout(this.searchTimeout);
+                    var self = this;
+                    this.searchTimeout = setTimeout(function() {
+                        renderGallery();
+                    }, 300);
+                });
+            }
+            
+            // Clear search
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener('click', function() {
+                    if (searchBar) {
+                        searchBar.value = '';
+                        clearSearchBtn.style.display = 'none';
+                        currentPage = 1;
+                        cachedSearchTerm = null;
+                        cachedItems = null;
+                        renderGallery();
+                        searchBar.focus();
+                    }
+                });
+            }
+            
+            // Window resize
             window.addEventListener('resize', function() {
                 renderGallery();
             });
             
-            // Initial animation for front page
-            setTimeout(() => {
-                const content = frontPage.querySelector('.content');
-                if (content) {
-                    content.style.animation = 'contentFadeIn 1s ease-out 0.3s forwards';
-                }
-                
-                const headline = frontPage.querySelector('.headline');
-                if (headline) {
-                    headline.style.animation = 'textFadeIn 1s ease-out 0.5s forwards';
-                }
-                
-                const description = frontPage.querySelector('.description');
-                if (description) {
-                    description.style.animation = 'textFadeIn 1s ease-out 0.7s forwards';
-                }
-                
-                const buttonContainer = frontPage.querySelector('.button-container');
-                if (buttonContainer) {
-                    buttonContainer.style.animation = 'buttonsFadeIn 1s ease-out 0.9s forwards';
-                }
-                
-                const buttons = frontPage.querySelectorAll('.btn');
-                buttons.forEach((btn, index) => {
-                    btn.style.animation = `buttonFadeIn 0.8s ease-out ${1 + (index * 0.2)}s forwards`;
-                });
-            }, 100);
-            
             // Initial render
-            setTimeout(() => {
+            setTimeout(function() {
                 renderGallery();
-            }, 200);
+            }, 100);
         });
     </script>
 </body>
