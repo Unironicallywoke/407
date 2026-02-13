@@ -1076,7 +1076,7 @@
             },
             
             lostPersons: {
-                // English names
+                // English names - KEEP NUMBERS HERE FOR ALIGNMENT
                 names_en: [
                     "1. * John Mayer",
                     "2. Sarah Johnson", 
@@ -1104,7 +1104,7 @@
                     "24. Lisa Taylor"
                 ],
                 
-                // Persian names
+                // Persian names - KEEP NUMBERS HERE FOR ALIGNMENT
                 names_fa: [
                     "1. * جان مایر",
                     "2. سارا جانسون",
@@ -1367,10 +1367,17 @@
             }
         }
 
-        // Parse name
+        // ============================================
+        // FIXED: Parse name - REMOVES NUMBERS FROM DISPLAY
+        // ============================================
         function parseName(nameString) {
+            // Check for priority star
             var hasPriority = nameString.indexOf('*') !== -1;
-            var cleanName = nameString.replace('*', '').replace(/\s+/g, ' ').trim();
+            
+            // Remove the number prefix (like "1. " or "12. ") and the star
+            // This regex removes: start of string, digits, dot, space, and optional star+space
+            var cleanName = nameString.replace(/^\d+\.\s*\*?\s*/, '').trim();
+            
             return {
                 displayName: cleanName,
                 hasPriority: hasPriority
