@@ -1608,476 +1608,484 @@
         }
     };
 
-    // Rest of your JavaScript remains exactly the same...
-    // Global variables, functions, event listeners, etc.
+    // Global variables
+    var currentPage = 1;
+    var isSearching = false;
+    // Desktop shows 6 people per page, Mobile shows 8 people per page
+    var itemsPerPageDesktop = 6;
+    var itemsPerPageMobile = 8;
+    
+    // Cache
+    var cachedItems = null;
+    var cachedLanguage = null;
+    var cachedSearchTerm = null;
 
-        // Global variables
-        var currentPage = 1;
-        var isSearching = false;
-        // Desktop shows 6 people per page, Mobile shows 8 people per page
-        var itemsPerPageDesktop = 6;
-        var itemsPerPageMobile = 8;
+    // Helper function to check if mobile
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    // Handle missing images
+    function handleMissingImage(imgElement, index) {
+        imgElement.onerror = function() {
+            console.warn("Image not found, using placeholder");
+            this.src = "https://via.placeholder.com/300x400/1a5a7a/ffffff?text=Person+" + (index + 1);
+            this.alt = "Placeholder";
+        };
+    }
+
+    // Language switching - IMMEDIATE update
+    function switchLanguage(lang) {
+        appData.currentLanguage = lang;
+        var langData = appData.languages[lang];
         
-        // Cache
-        var cachedItems = null;
-        var cachedLanguage = null;
-        var cachedSearchTerm = null;
-
-        // Helper function to check if mobile
-        function isMobile() {
-            return window.innerWidth <= 768;
+        // Update HTML direction
+        document.body.dir = langData.dir;
+        document.documentElement.lang = lang;
+        
+        // Update language toggle button
+        var toggleBtn = document.getElementById('language-toggle');
+        var flagSpan = toggleBtn.querySelector('.language-flag');
+        var textSpan = toggleBtn.querySelector('.language-text');
+        
+        flagSpan.textContent = langData.flag;
+        textSpan.textContent = lang === 'en' ? 'فارسی' : 'English';
+        
+        // Update all text elements
+        updateTextElements();
+        
+        // Update search bar placeholder
+        var searchBar = document.getElementById('search-bar');
+        if (searchBar) {
+            searchBar.placeholder = lang === 'en' 
+                ? searchBar.getAttribute('data-en-placeholder') 
+                : searchBar.getAttribute('data-fa-placeholder');
         }
+        
+        // Force clear cache and reset to page 1
+        cachedItems = null;
+        cachedLanguage = null;
+        cachedSearchTerm = null;
+        currentPage = 1;
+        
+        // Force immediate re-render
+        renderGallery();
+        
+        // Save preference
+        localStorage.setItem('preferredLanguage', lang);
+    }
 
-        // Handle missing images
-        function handleMissingImage(imgElement, index) {
-            imgElement.onerror = function() {
-                console.warn("Image not found, using placeholder");
-                this.src = "https://via.placeholder.com/300x400/1a5a7a/ffffff?text=Person+" + (index + 1);
-                this.alt = "Placeholder";
-            };
-        }
-
-        // Language switching - IMMEDIATE update
-        function switchLanguage(lang) {
-            appData.currentLanguage = lang;
-            var langData = appData.languages[lang];
-            
-            // Update HTML direction
-            document.body.dir = langData.dir;
-            document.documentElement.lang = lang;
-            
-            // Update language toggle button
-            var toggleBtn = document.getElementById('language-toggle');
-            var flagSpan = toggleBtn.querySelector('.language-flag');
-            var textSpan = toggleBtn.querySelector('.language-text');
-            
-            flagSpan.textContent = langData.flag;
-            textSpan.textContent = lang === 'en' ? 'فارسی' : 'English';
-            
-            // Update all text elements
-            updateTextElements();
-            
-            // Update search bar placeholder
-            var searchBar = document.getElementById('search-bar');
-            if (searchBar) {
-                searchBar.placeholder = lang === 'en' 
-                    ? searchBar.getAttribute('data-en-placeholder') 
-                    : searchBar.getAttribute('data-fa-placeholder');
-            }
-            
-            // Force clear cache and reset to page 1
-            cachedItems = null;
-            cachedLanguage = null;
-            cachedSearchTerm = null;
-            currentPage = 1;
-            
-            // Force immediate re-render
-            renderGallery();
-            
-            // Save preference
-            localStorage.setItem('preferredLanguage', lang);
-        }
-
-        // Update text elements
-        function updateTextElements() {
-            var elements = document.querySelectorAll('[data-en], [data-fa]');
-            
-            for (var i = 0; i < elements.length; i++) {
-                var element = elements[i];
-                if (appData.currentLanguage === 'en') {
-                    if (element.hasAttribute('data-en')) {
-                        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                            element.placeholder = element.getAttribute('data-en');
-                        } else {
-                            element.textContent = element.getAttribute('data-en');
-                        }
-                    }
-                } else {
-                    if (element.hasAttribute('data-fa')) {
-                        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                            element.placeholder = element.getAttribute('data-fa');
-                        } else {
-                            element.textContent = element.getAttribute('data-fa');
-                        }
+    // Update text elements
+    function updateTextElements() {
+        var elements = document.querySelectorAll('[data-en], [data-fa]');
+        
+        for (var i = 0; i < elements.length; i++) {
+            var element = elements[i];
+            if (appData.currentLanguage === 'en') {
+                if (element.hasAttribute('data-en')) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = element.getAttribute('data-en');
+                    } else {
+                        element.textContent = element.getAttribute('data-en');
                     }
                 }
-            }
-        }
-
-        // ============================================
-        // FIXED: Parse name - REMOVES NUMBERS FROM DISPLAY
-        // ============================================
-        function parseName(nameString) {
-            // Check for priority star
-            var hasPriority = nameString.indexOf('*') !== -1;
-            
-            // Remove the number prefix (like "1. " or "12. ") and the star
-            // This regex removes: start of string, digits, dot, space, and optional star+space
-            var cleanName = nameString.replace(/^\d+\.\s*\*?\s*/, '').trim();
-            
-            return {
-                displayName: cleanName,
-                hasPriority: hasPriority
-            };
-        }
-
-        // Parse link
-        function parseLink(linkString) {
-            if (!linkString) return '#';
-            var match = linkString.match(/\d+\.\s*(.+)/);
-            return match ? match[1] : linkString;
-        }
-
-        // Get current data with priority sorting
-        function getCurrentData() {
-            var lang = appData.currentLanguage;
-            
-            var nameArray = appData.lostPersons["names_" + lang] || appData.lostPersons.names_en;
-            var dateArray = appData.lostPersons["dates_" + lang] || appData.lostPersons.dates_en;
-            var linkArray = appData.lostPersons["links_" + lang] || appData.lostPersons.links_en;
-            var photosArray = appData.lostPersons.photos;
-            
-            var combined = [];
-            
-            for (var i = 0; i < nameArray.length; i++) {
-                var parsed = parseName(nameArray[i]);
-                var date = dateArray[i] || (i + 1 + ". Date Unknown");
-                var link = linkArray[i] || (i + 1 + ". #");
-                var photo = photosArray[i] || "images/placeholder.jpg";
-                
-                combined.push({
-                    displayName: parsed.displayName,
-                    hasPriority: parsed.hasPriority,
-                    date: date,
-                    link: link,
-                    photo: photo,
-                    index: i
-                });
-            }
-            
-            // Sort: priority first
-            combined.sort(function(a, b) {
-                if (a.hasPriority && !b.hasPriority) return -1;
-                if (!a.hasPriority && b.hasPriority) return 1;
-                return 0;
-            });
-            
-            return {
-                items: combined
-            };
-        }
-
-        // Get filtered items
-        function getFilteredItems(searchTerm) {
-            var currentLang = appData.currentLanguage;
-            
-            if (cachedLanguage !== currentLang || cachedSearchTerm !== searchTerm || cachedItems === null) {
-                var currentData = getCurrentData();
-                var allItems = currentData.items;
-                
-                if (!searchTerm || searchTerm.trim() === '') {
-                    cachedItems = allItems;
-                    isSearching = false;
-                } else {
-                    var term = searchTerm.toLowerCase().trim();
-                    var filtered = [];
-                    
-                    for (var i = 0; i < allItems.length; i++) {
-                        if (allItems[i].displayName.toLowerCase().indexOf(term) !== -1) {
-                            filtered.push(allItems[i]);
-                        }
-                    }
-                    
-                    cachedItems = filtered;
-                    isSearching = true;
-                }
-                
-                cachedLanguage = currentLang;
-                cachedSearchTerm = searchTerm;
-            }
-            
-            return cachedItems;
-        }
-
-        // Render gallery
-        function renderGallery() {
-            var searchTerm = document.getElementById('search-bar') ? document.getElementById('search-bar').value : '';
-            var items = getFilteredItems(searchTerm);
-            
-            var desktopGallery = document.getElementById('desktop-gallery');
-            var mobileGallery = document.getElementById('mobile-gallery');
-            var paginationContainer = document.getElementById('pagination-container');
-            var noResultsMsg = document.getElementById('no-results');
-            
-            if (!desktopGallery || !mobileGallery || !paginationContainer) return;
-            
-            // Clear existing content
-            desktopGallery.innerHTML = '';
-            mobileGallery.innerHTML = '';
-            paginationContainer.innerHTML = '';
-            
-            // Show/hide no results
-            if (items.length === 0) {
-                if (noResultsMsg) noResultsMsg.style.display = 'block';
-                desktopGallery.style.display = 'none';
-                mobileGallery.style.display = 'none';
-                paginationContainer.style.display = 'none';
-                return;
             } else {
-                if (noResultsMsg) noResultsMsg.style.display = 'none';
-                
-                // Set display based on screen size
-                var mobile = isMobile();
-                desktopGallery.style.display = mobile ? 'none' : 'grid';
-                mobileGallery.style.display = mobile ? 'flex' : 'none';
-                paginationContainer.style.display = 'flex'; // Always show pagination
-            }
-            
-            var totalItems = items.length;
-            
-            // Use different items per page for desktop vs mobile
-            var itemsPerPage = isMobile() ? itemsPerPageMobile : itemsPerPageDesktop;
-            var totalPages = Math.ceil(totalItems / itemsPerPage);
-            
-            if (currentPage < 1) currentPage = 1;
-            if (currentPage > totalPages) currentPage = totalPages;
-            
-            var dateLabel = appData.currentLanguage === 'en' ? 'Missing since:' : 'مفقود شده از:';
-            
-            // Desktop or Mobile gallery - paginated based on device
-            var startIndex = (currentPage - 1) * itemsPerPage;
-            var endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-            
-            for (var i = startIndex; i < endIndex; i++) {
-                var item = items[i];
-                if (!item) continue;
-                
-                var link = parseLink(item.link);
-                var displayName = item.displayName || 'Unknown';
-                var priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
-                
-                if (isMobile()) {
-                    // Mobile card
-                    var mobileCard = document.createElement('div');
-                    mobileCard.className = 'mobile-person-card';
-                    mobileCard.style.animationDelay = (0.4 + ((i - startIndex) % 8) * 0.1) + 's';
-                    mobileCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="mobile-person-photo"><div class="mobile-person-info"><div class="mobile-person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="mobile-person-date">' + dateLabel + ' ' + (item.date || 'Unknown') + '</div></div>';
-                    mobileGallery.appendChild(mobileCard);
-                    
-                    var mobileImg = mobileCard.querySelector('.mobile-person-photo');
-                    if (mobileImg) handleMissingImage(mobileImg, item.index || 0);
-                } else {
-                    // Desktop card
-                    var personCard = document.createElement('div');
-                    personCard.className = 'person-card';
-                    personCard.style.animationDelay = (0.5 + ((i - startIndex) % 6) * 0.1) + 's';
-                    personCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="person-photo"><div class="person-info"><div class="person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="person-date">' + dateLabel + ' ' + (item.date || 'Unknown') + '</div></div>';
-                    desktopGallery.appendChild(personCard);
-                    
-                    var img = personCard.querySelector('.person-photo');
-                    if (img) handleMissingImage(img, item.index || 0);
+                if (element.hasAttribute('data-fa')) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = element.getAttribute('data-fa');
+                    } else {
+                        element.textContent = element.getAttribute('data-fa');
+                    }
                 }
             }
-            
-            // ============================================
-            // PAGINATION - NUMERAL NAVIGATOR for BOTH Desktop AND Mobile
-            // ============================================
-            for (var p = 1; p <= totalPages; p++) {
-                var pageNumber = document.createElement('div');
-                pageNumber.className = 'page-number' + (p === currentPage ? ' active' : '');
-                pageNumber.dataset.page = p;
-                pageNumber.textContent = p;
-                
-                pageNumber.addEventListener('click', function() {
-                    currentPage = parseInt(this.dataset.page);
-                    renderGallery();
-                });
-                
-                paginationContainer.appendChild(pageNumber);
-            }
-            
-            // Trigger animations
-            setTimeout(function() {
-                var cards = document.querySelectorAll('.person-card, .mobile-person-card');
-                for (var c = 0; c < cards.length; c++) {
-                    cards[c].style.animation = 'none';
-                    cards[c].offsetHeight;
-                    cards[c].style.animation = 'cardFadeIn 0.8s ease-out ' + cards[c].style.animationDelay + ' forwards';
-                }
-            }, 50);
         }
+    }
 
-        // Page navigation
-        document.addEventListener('DOMContentLoaded', function() {
-            var frontPage = document.getElementById('front-page');
-            var secondPage = document.getElementById('second-page');
-            var galleryPage = document.getElementById('gallery-page');
+    // ============================================
+    // FIXED: Parse name - REMOVES NUMBERS FROM DISPLAY
+    // ============================================
+    function parseName(nameString) {
+        // Check for priority star
+        var hasPriority = nameString.indexOf('*') !== -1;
+        
+        // Remove the number prefix (like "1. " or "12. ") and the star
+        // This regex removes: start of string, digits, dot, space, and optional star+space
+        var cleanName = nameString.replace(/^\d+\.\s*\*?\s*/, '').trim();
+        
+        return {
+            displayName: cleanName,
+            hasPriority: hasPriority
+        };
+    }
+
+    // ============================================
+    // NEW: Parse date - REMOVES NUMBERS FROM DISPLAY
+    // ============================================
+    function parseDate(dateString) {
+        if (!dateString) return 'Unknown';
+        // Remove the number prefix (like "1. " or "12. ")
+        return dateString.replace(/^\d+\.\s*/, '').trim();
+    }
+
+    // Parse link
+    function parseLink(linkString) {
+        if (!linkString) return '#';
+        var match = linkString.match(/\d+\.\s*(.+)/);
+        return match ? match[1] : linkString;
+    }
+
+    // Get current data with priority sorting
+    function getCurrentData() {
+        var lang = appData.currentLanguage;
+        
+        var nameArray = appData.lostPersons["names_" + lang] || appData.lostPersons.names_en;
+        var dateArray = appData.lostPersons["dates_" + lang] || appData.lostPersons.dates_en;
+        var linkArray = appData.lostPersons["links_" + lang] || appData.lostPersons.links_en;
+        var photosArray = appData.lostPersons.photos;
+        
+        var combined = [];
+        
+        for (var i = 0; i < nameArray.length; i++) {
+            var parsed = parseName(nameArray[i]);
+            var date = dateArray[i] || (i + 1 + ". Date Unknown");
+            var link = linkArray[i] || (i + 1 + ". #");
+            var photo = photosArray[i] || "images/placeholder.jpg";
             
-            var btnPage2 = document.getElementById('btn-page2');
-            var btnOther = document.getElementById('btn-other');
-            var btnLostPersons = document.getElementById('btn-lost-persons');
-            var btnCategory2 = document.getElementById('btn-category2');
-            var btnCategory3 = document.getElementById('btn-category3');
-            var backToFront = document.getElementById('back-to-front');
-            var backToSecond = document.getElementById('back-to-second');
-            
-            var prevPage = document.getElementById('prev-page');
-            var nextPage = document.getElementById('next-page');
-            
-            var searchBar = document.getElementById('search-bar');
-            var clearSearchBtn = document.getElementById('clear-search');
-            var languageToggle = document.getElementById('language-toggle');
-            
-            // Load saved language
-            var savedLanguage = localStorage.getItem('preferredLanguage');
-            if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fa')) {
-                setTimeout(function() {
-                    switchLanguage(savedLanguage);
-                }, 10);
-            }
-            
-            // Language toggle
-            languageToggle.addEventListener('click', function() {
-                var newLang = appData.currentLanguage === 'en' ? 'fa' : 'en';
-                switchLanguage(newLang);
+            combined.push({
+                displayName: parsed.displayName,
+                hasPriority: parsed.hasPriority,
+                date: date,
+                link: link,
+                photo: photo,
+                index: i
             });
-            
-            // Show page function
-            function showPage(page) {
-                var allPages = document.querySelectorAll('.page');
-                for (var i = 0; i < allPages.length; i++) {
-                    allPages[i].classList.remove('active');
-                }
-                
-                page.style.animation = 'none';
-                page.offsetHeight;
-                page.style.animation = 'pageFadeIn 0.8s ease-out forwards';
-                page.classList.add('active');
-                
-                if (page.id === 'gallery-page') {
-                    if (searchBar) {
-                        searchBar.value = '';
-                        clearSearchBtn.style.display = 'none';
-                    }
-                    currentPage = 1;
-                    cachedItems = null;
-                    cachedLanguage = null;
-                    cachedSearchTerm = null;
-                    
-                    setTimeout(function() {
-                        renderGallery();
-                    }, 50);
-                }
-            }
-            
-            // Event listeners
-            if (btnPage2) btnPage2.addEventListener('click', function() { showPage(secondPage); });
-            if (btnOther) {
-                btnOther.addEventListener('click', function() {
-                    var message = appData.currentLanguage === 'en' ? 'This would navigate to the report page.' : 'این شما را به صفحه گزارش هدایت می کند.';
-                    alert(message);
-                });
-            }
-            if (btnLostPersons) {
-                btnLostPersons.addEventListener('click', function() {
-                    currentPage = 1;
-                    showPage(galleryPage);
-                });
-            }
-            if (btnCategory2) {
-                btnCategory2.addEventListener('click', function() {
-                    var message = appData.currentLanguage === 'en' ? 'Category 2 selected' : 'دسته ۲ انتخاب شد';
-                    alert(message);
-                });
-            }
-            if (btnCategory3) {
-                btnCategory3.addEventListener('click', function() {
-                    var message = appData.currentLanguage === 'en' ? 'Category 3 selected' : 'دسته ۳ انتخاب شد';
-                    alert(message);
-                });
-            }
-            if (backToFront) backToFront.addEventListener('click', function() { showPage(frontPage); });
-            if (backToSecond) backToSecond.addEventListener('click', function() { showPage(secondPage); });
-            
-            // Navigation arrows
-            if (prevPage) {
-                prevPage.addEventListener('click', function() {
-                    var items = getFilteredItems(searchBar ? searchBar.value : '');
-                    var itemsPerPage = isMobile() ? itemsPerPageMobile : itemsPerPageDesktop;
-                    var totalPages = Math.ceil(items.length / itemsPerPage);
-                    
-                    if (totalPages > 0) {
-                        if (currentPage > 1) {
-                            currentPage--;
-                        } else {
-                            currentPage = totalPages;
-                        }
-                        renderGallery();
-                    }
-                });
-            }
-            
-            if (nextPage) {
-                nextPage.addEventListener('click', function() {
-                    var items = getFilteredItems(searchBar ? searchBar.value : '');
-                    var itemsPerPage = isMobile() ? itemsPerPageMobile : itemsPerPageDesktop;
-                    var totalPages = Math.ceil(items.length / itemsPerPage);
-                    
-                    if (totalPages > 0) {
-                        if (currentPage < totalPages) {
-                            currentPage++;
-                        } else {
-                            currentPage = 1;
-                        }
-                        renderGallery();
-                    }
-                });
-            }
-            
-            // Search
-            if (searchBar) {
-                searchBar.addEventListener('input', function() {
-                    currentPage = 1;
-                    clearSearchBtn.style.display = this.value.trim() !== '' ? 'block' : 'none';
-                    cachedSearchTerm = null;
-                    cachedItems = null;
-                    
-                    clearTimeout(this.searchTimeout);
-                    var self = this;
-                    this.searchTimeout = setTimeout(function() {
-                        renderGallery();
-                    }, 300);
-                });
-            }
-            
-            // Clear search
-            if (clearSearchBtn) {
-                clearSearchBtn.addEventListener('click', function() {
-                    if (searchBar) {
-                        searchBar.value = '';
-                        clearSearchBtn.style.display = 'none';
-                        currentPage = 1;
-                        cachedSearchTerm = null;
-                        cachedItems = null;
-                        renderGallery();
-                        searchBar.focus();
-                    }
-                });
-            }
-            
-            // Window resize
-            window.addEventListener('resize', function() {
-                renderGallery();
-            });
-            
-            // Initial render
-            setTimeout(function() {
-                renderGallery();
-            }, 100);
+        }
+        
+        // Sort: priority first
+        combined.sort(function(a, b) {
+            if (a.hasPriority && !b.hasPriority) return -1;
+            if (!a.hasPriority && b.hasPriority) return 1;
+            return 0;
         });
-    </script>
+        
+        return {
+            items: combined
+        };
+    }
+
+    // Get filtered items
+    function getFilteredItems(searchTerm) {
+        var currentLang = appData.currentLanguage;
+        
+        if (cachedLanguage !== currentLang || cachedSearchTerm !== searchTerm || cachedItems === null) {
+            var currentData = getCurrentData();
+            var allItems = currentData.items;
+            
+            if (!searchTerm || searchTerm.trim() === '') {
+                cachedItems = allItems;
+                isSearching = false;
+            } else {
+                var term = searchTerm.toLowerCase().trim();
+                var filtered = [];
+                
+                for (var i = 0; i < allItems.length; i++) {
+                    if (allItems[i].displayName.toLowerCase().indexOf(term) !== -1) {
+                        filtered.push(allItems[i]);
+                    }
+                }
+                
+                cachedItems = filtered;
+                isSearching = true;
+            }
+            
+            cachedLanguage = currentLang;
+            cachedSearchTerm = searchTerm;
+        }
+        
+        return cachedItems;
+    }
+
+    // Render gallery
+    function renderGallery() {
+        var searchTerm = document.getElementById('search-bar') ? document.getElementById('search-bar').value : '';
+        var items = getFilteredItems(searchTerm);
+        
+        var desktopGallery = document.getElementById('desktop-gallery');
+        var mobileGallery = document.getElementById('mobile-gallery');
+        var paginationContainer = document.getElementById('pagination-container');
+        var noResultsMsg = document.getElementById('no-results');
+        
+        if (!desktopGallery || !mobileGallery || !paginationContainer) return;
+        
+        // Clear existing content
+        desktopGallery.innerHTML = '';
+        mobileGallery.innerHTML = '';
+        paginationContainer.innerHTML = '';
+        
+        // Show/hide no results
+        if (items.length === 0) {
+            if (noResultsMsg) noResultsMsg.style.display = 'block';
+            desktopGallery.style.display = 'none';
+            mobileGallery.style.display = 'none';
+            paginationContainer.style.display = 'none';
+            return;
+        } else {
+            if (noResultsMsg) noResultsMsg.style.display = 'none';
+            
+            // Set display based on screen size
+            var mobile = isMobile();
+            desktopGallery.style.display = mobile ? 'none' : 'grid';
+            mobileGallery.style.display = mobile ? 'flex' : 'none';
+            paginationContainer.style.display = 'flex'; // Always show pagination
+        }
+        
+        var totalItems = items.length;
+        
+        // Use different items per page for desktop vs mobile
+        var itemsPerPage = isMobile() ? itemsPerPageMobile : itemsPerPageDesktop;
+        var totalPages = Math.ceil(totalItems / itemsPerPage);
+        
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        
+        var dateLabel = appData.currentLanguage === 'en' ? 'Missing since:' : 'مفقود شده از:';
+        
+        // Desktop or Mobile gallery - paginated based on device
+        var startIndex = (currentPage - 1) * itemsPerPage;
+        var endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        
+        for (var i = startIndex; i < endIndex; i++) {
+            var item = items[i];
+            if (!item) continue;
+            
+            var link = parseLink(item.link);
+            var displayName = item.displayName || 'Unknown';
+            var priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
+            
+            // ============================================
+            // FIXED: Parse date to remove numbers
+            // ============================================
+            var displayDate = parseDate(item.date);
+            
+            if (isMobile()) {
+                // Mobile card
+                var mobileCard = document.createElement('div');
+                mobileCard.className = 'mobile-person-card';
+                mobileCard.style.animationDelay = (0.4 + ((i - startIndex) % 8) * 0.1) + 's';
+                mobileCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="mobile-person-photo"><div class="mobile-person-info"><div class="mobile-person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="mobile-person-date">' + dateLabel + ' ' + displayDate + '</div></div>';
+                mobileGallery.appendChild(mobileCard);
+                
+                var mobileImg = mobileCard.querySelector('.mobile-person-photo');
+                if (mobileImg) handleMissingImage(mobileImg, item.index || 0);
+            } else {
+                // Desktop card
+                var personCard = document.createElement('div');
+                personCard.className = 'person-card';
+                personCard.style.animationDelay = (0.5 + ((i - startIndex) % 6) * 0.1) + 's';
+                personCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="person-photo"><div class="person-info"><div class="person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="person-date">' + dateLabel + ' ' + displayDate + '</div></div>';
+                desktopGallery.appendChild(personCard);
+                
+                var img = personCard.querySelector('.person-photo');
+                if (img) handleMissingImage(img, item.index || 0);
+            }
+        }
+        
+        // ============================================
+        // PAGINATION - NUMERAL NAVIGATOR for BOTH Desktop AND Mobile
+        // ============================================
+        for (var p = 1; p <= totalPages; p++) {
+            var pageNumber = document.createElement('div');
+            pageNumber.className = 'page-number' + (p === currentPage ? ' active' : '');
+            pageNumber.dataset.page = p;
+            pageNumber.textContent = p;
+            
+            pageNumber.addEventListener('click', function() {
+                currentPage = parseInt(this.dataset.page);
+                renderGallery();
+            });
+            
+            paginationContainer.appendChild(pageNumber);
+        }
+        
+        // Trigger animations
+        setTimeout(function() {
+            var cards = document.querySelectorAll('.person-card, .mobile-person-card');
+            for (var c = 0; c < cards.length; c++) {
+                cards[c].style.animation = 'none';
+                cards[c].offsetHeight;
+                cards[c].style.animation = 'cardFadeIn 0.8s ease-out ' + cards[c].style.animationDelay + ' forwards';
+            }
+        }, 50);
+    }
+
+    // Page navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        var frontPage = document.getElementById('front-page');
+        var secondPage = document.getElementById('second-page');
+        var galleryPage = document.getElementById('gallery-page');
+        
+        var btnPage2 = document.getElementById('btn-page2');
+        var btnOther = document.getElementById('btn-other');
+        var btnLostPersons = document.getElementById('btn-lost-persons');
+        var btnCategory2 = document.getElementById('btn-category2');
+        var btnCategory3 = document.getElementById('btn-category3');
+        var backToFront = document.getElementById('back-to-front');
+        var backToSecond = document.getElementById('back-to-second');
+        
+        var prevPage = document.getElementById('prev-page');
+        var nextPage = document.getElementById('next-page');
+        
+        var searchBar = document.getElementById('search-bar');
+        var clearSearchBtn = document.getElementById('clear-search');
+        var languageToggle = document.getElementById('language-toggle');
+        
+        // Load saved language
+        var savedLanguage = localStorage.getItem('preferredLanguage');
+        if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fa')) {
+            setTimeout(function() {
+                switchLanguage(savedLanguage);
+            }, 10);
+        }
+        
+        // Language toggle
+        languageToggle.addEventListener('click', function() {
+            var newLang = appData.currentLanguage === 'en' ? 'fa' : 'en';
+            switchLanguage(newLang);
+        });
+        
+        // Show page function
+        function showPage(page) {
+            var allPages = document.querySelectorAll('.page');
+            for (var i = 0; i < allPages.length; i++) {
+                allPages[i].classList.remove('active');
+            }
+            
+            page.style.animation = 'none';
+            page.offsetHeight;
+            page.style.animation = 'pageFadeIn 0.8s ease-out forwards';
+            page.classList.add('active');
+            
+            if (page.id === 'gallery-page') {
+                if (searchBar) {
+                    searchBar.value = '';
+                    clearSearchBtn.style.display = 'none';
+                }
+                currentPage = 1;
+                cachedItems = null;
+                cachedLanguage = null;
+                cachedSearchTerm = null;
+                
+                setTimeout(function() {
+                    renderGallery();
+                }, 50);
+            }
+        }
+        
+        // Event listeners
+        if (btnPage2) btnPage2.addEventListener('click', function() { showPage(secondPage); });
+        if (btnOther) {
+            btnOther.addEventListener('click', function() {
+                var message = appData.currentLanguage === 'en' ? 'This would navigate to the report page.' : 'این شما را به صفحه گزارش هدایت می کند.';
+                alert(message);
+            });
+        }
+        if (btnLostPersons) {
+            btnLostPersons.addEventListener('click', function() {
+                currentPage = 1;
+                showPage(galleryPage);
+            });
+        }
+        if (btnCategory2) {
+            btnCategory2.addEventListener('click', function() {
+                var message = appData.currentLanguage === 'en' ? 'Category 2 selected' : 'دسته ۲ انتخاب شد';
+                alert(message);
+            });
+        }
+        if (btnCategory3) {
+            btnCategory3.addEventListener('click', function() {
+                var message = appData.currentLanguage === 'en' ? 'Category 3 selected' : 'دسته ۳ انتخاب شد';
+                alert(message);
+            });
+        }
+        if (backToFront) backToFront.addEventListener('click', function() { showPage(frontPage); });
+        if (backToSecond) backToSecond.addEventListener('click', function() { showPage(secondPage); });
+        
+        // Navigation arrows
+        if (prevPage) {
+            prevPage.addEventListener('click', function() {
+                var items = getFilteredItems(searchBar ? searchBar.value : '');
+                var itemsPerPage = isMobile() ? itemsPerPageMobile : itemsPerPageDesktop;
+                var totalPages = Math.ceil(items.length / itemsPerPage);
+                
+                if (totalPages > 0) {
+                    if (currentPage > 1) {
+                        currentPage--;
+                    } else {
+                        currentPage = totalPages;
+                    }
+                    renderGallery();
+                }
+            });
+        }
+        
+        if (nextPage) {
+            nextPage.addEventListener('click', function() {
+                var items = getFilteredItems(searchBar ? searchBar.value : '');
+                var itemsPerPage = isMobile() ? itemsPerPageMobile : itemsPerPageDesktop;
+                var totalPages = Math.ceil(items.length / itemsPerPage);
+                
+                if (totalPages > 0) {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                    } else {
+                        currentPage = 1;
+                    }
+                    renderGallery();
+                }
+            });
+        }
+        
+        // Search
+        if (searchBar) {
+            searchBar.addEventListener('input', function() {
+                currentPage = 1;
+                clearSearchBtn.style.display = this.value.trim() !== '' ? 'block' : 'none';
+                cachedSearchTerm = null;
+                cachedItems = null;
+                
+                clearTimeout(this.searchTimeout);
+                var self = this;
+                this.searchTimeout = setTimeout(function() {
+                    renderGallery();
+                }, 300);
+            });
+        }
+        
+        // Clear search
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', function() {
+                if (searchBar) {
+                    searchBar.value = '';
+                    clearSearchBtn.style.display = 'none';
+                    currentPage = 1;
+                    cachedSearchTerm = null;
+                    cachedItems = null;
+                    renderGallery();
+                    searchBar.focus();
+                }
+            });
+        }
+        
+        // Window resize
+        window.addEventListener('resize', function() {
+            renderGallery();
+        });
+        
+        // Initial render
+        setTimeout(function() {
+            renderGallery();
+        }, 100);
+    });
+</script>
 </body>
 </html>
-
-
-
