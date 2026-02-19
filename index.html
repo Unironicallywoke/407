@@ -1777,6 +1777,15 @@
             };
         }
 
+        // ============================================
+        // NEW: Parse date - REMOVES NUMBERS FROM DISPLAY
+        // ============================================
+        function parseDate(dateString) {
+            if (!dateString) return 'Unknown';
+            // Remove the number prefix (like "1. " or "12. ")
+            return dateString.replace(/^\d+\.\s*/, '').trim();
+        }
+
         // Parse link
         function parseLink(linkString) {
             if (!linkString) return '#';
@@ -1898,7 +1907,7 @@
             if (currentPage < 1) currentPage = 1;
             if (currentPage > totalPages) currentPage = totalPages;
             
-            var dateLabel = appData.currentLanguage === 'en' ? 'Arrested Si' : 'بازداشت شده از:';
+            var dateLabel = appData.currentLanguage === 'en' ? 'Arrested since:' : 'بازداشت شده از:';
             
             // Desktop or Mobile gallery - paginated based on device
             var startIndex = (currentPage - 1) * itemsPerPage;
@@ -1912,12 +1921,15 @@
                 var displayName = item.displayName || 'Unknown';
                 var priorityStar = item.hasPriority ? '<span class="priority-star">*</span>' : '';
                 
+                // Parse date to remove numbers
+                var displayDate = parseDate(item.date);
+                
                 if (isMobile()) {
                     // Mobile card
                     var mobileCard = document.createElement('div');
                     mobileCard.className = 'mobile-person-card';
                     mobileCard.style.animationDelay = (0.4 + ((i - startIndex) % 8) * 0.1) + 's';
-                    mobileCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="mobile-person-photo"><div class="mobile-person-info"><div class="mobile-person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="mobile-person-date">' + dateLabel + ' ' + (item.date || 'Unknown') + '</div></div>';
+                    mobileCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="mobile-person-photo"><div class="mobile-person-info"><div class="mobile-person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="mobile-person-date">' + dateLabel + ' ' + displayDate + '</div></div>';
                     mobileGallery.appendChild(mobileCard);
                     
                     var mobileImg = mobileCard.querySelector('.mobile-person-photo');
@@ -1927,7 +1939,7 @@
                     var personCard = document.createElement('div');
                     personCard.className = 'person-card';
                     personCard.style.animationDelay = (0.5 + ((i - startIndex) % 6) * 0.1) + 's';
-                    personCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="person-photo"><div class="person-info"><div class="person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="person-date">' + dateLabel + ' ' + (item.date || 'Unknown') + '</div></div>';
+                    personCard.innerHTML = '<img src="' + (item.photo || 'images/placeholder.jpg') + '" alt="' + displayName + '" class="person-photo"><div class="person-info"><div class="person-name"><a href="' + link + '" target="_blank" rel="noopener noreferrer">' + displayName + priorityStar + '</a></div><div class="person-date">' + dateLabel + ' ' + displayDate + '</div></div>';
                     desktopGallery.appendChild(personCard);
                     
                     var img = personCard.querySelector('.person-photo');
@@ -1998,19 +2010,84 @@
                 switchLanguage(newLang);
             });
             
-            // Show page function
+            // Show page function - FIXED: Preserve content opacity when navigating back
             function showPage(page) {
                 var allPages = document.querySelectorAll('.page');
                 for (var i = 0; i < allPages.length; i++) {
                     allPages[i].classList.remove('active');
+                    // Reset animation styles to ensure content reappears properly
+                    var content = allPages[i].querySelector('.content');
+                    if (content) {
+                        content.style.animation = 'none';
+                        content.style.opacity = '0';
+                    }
                 }
                 
+                // Reset animations for the new page
                 page.style.animation = 'none';
                 page.offsetHeight;
                 page.style.animation = 'pageFadeIn 0.8s ease-out forwards';
                 page.classList.add('active');
                 
+                // Reset and trigger animations for content elements
+                var content = page.querySelector('.content');
+                if (content) {
+                    content.style.animation = 'none';
+                    content.offsetHeight;
+                    content.style.animation = 'contentFadeIn 1s ease-out 0.3s forwards';
+                }
+                
+                // Reset and trigger animations for headline
+                var headline = page.querySelector('.headline, .gallery-title');
+                if (headline) {
+                    headline.style.animation = 'none';
+                    headline.offsetHeight;
+                    headline.style.animation = 'textFadeIn 1s ease-out 0.5s forwards';
+                }
+                
+                // Reset and trigger animations for description
+                var description = page.querySelector('.description');
+                if (description) {
+                    description.style.animation = 'none';
+                    description.offsetHeight;
+                    description.style.animation = 'textFadeIn 1s ease-out 0.7s forwards';
+                }
+                
+                // Reset and trigger animations for buttons
+                var buttonContainer = page.querySelector('.button-container');
+                if (buttonContainer) {
+                    buttonContainer.style.animation = 'none';
+                    buttonContainer.offsetHeight;
+                    buttonContainer.style.animation = 'buttonsFadeIn 1s ease-out 0.9s forwards';
+                }
+                
+                // Reset and trigger animations for individual buttons
+                var buttons = page.querySelectorAll('.btn');
+                for (var j = 0; j < buttons.length; j++) {
+                    buttons[j].style.animation = 'none';
+                    buttons[j].offsetHeight;
+                    buttons[j].style.animation = 'buttonFadeIn 0.8s ease-out ' + (1 + (j * 0.2)) + 's forwards';
+                }
+                
+                // Reset and trigger animations for search bar if on gallery page
+                var searchContainer = page.querySelector('.search-container');
+                if (searchContainer) {
+                    searchContainer.style.animation = 'none';
+                    searchContainer.offsetHeight;
+                    searchContainer.style.animation = 'searchFadeIn 0.8s ease-out 0.6s forwards';
+                }
+                
+                // Reset and trigger animations for arrows if on gallery page
                 if (page.id === 'gallery-page') {
+                    var arrows = [prevPage, nextPage];
+                    for (var k = 0; k < arrows.length; k++) {
+                        if (arrows[k]) {
+                            arrows[k].style.animation = 'none';
+                            arrows[k].offsetHeight;
+                            arrows[k].style.animation = 'arrowFadeIn 0.8s ease-out 0.5s forwards';
+                        }
+                    }
+                    
                     if (searchBar) {
                         searchBar.value = '';
                         clearSearchBtn.style.display = 'none';
@@ -2022,7 +2099,7 @@
                     
                     setTimeout(function() {
                         renderGallery();
-                    }, 50);
+                    }, 300);
                 }
             }
             
@@ -2052,8 +2129,19 @@
                     alert(message);
                 });
             }
-            if (backToFront) backToFront.addEventListener('click', function() { showPage(frontPage); });
-            if (backToSecond) backToSecond.addEventListener('click', function() { showPage(secondPage); });
+            
+            // FIXED: Added missing back button event listeners
+            if (backToFront) {
+                backToFront.addEventListener('click', function() { 
+                    showPage(frontPage); 
+                });
+            }
+            
+            if (backToSecond) {
+                backToSecond.addEventListener('click', function() { 
+                    showPage(secondPage); 
+                });
+            }
             
             // Navigation arrows
             if (prevPage) {
@@ -2134,6 +2222,3 @@
     </script>
 </body>
 </html>
-
-
-
