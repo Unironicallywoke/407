@@ -1025,7 +1025,7 @@
             <div class="button-container">
                 <button class="btn btn-primary" id="btn-lost-persons" data-en="In Danger Of Death Penalty" data-fa="در خطر اعدام">In Danger Of Death Penalty</button>
                 <button class="btn btn-secondary" id="btn-category2" data-en="Missing" data-fa="مفقود شده">Missing</button>
-                <button class="btn btn-secondary" id="btn-category3" data-en="In Custody" data-fa="بازداشتی">In Custody</button>
+                <!-- In Custody button removed as requested -->
             </div>
         </div>
     </div>
@@ -2003,7 +2003,6 @@
         var btnOther = document.getElementById('btn-other');
         var btnLostPersons = document.getElementById('btn-lost-persons');
         var btnCategory2 = document.getElementById('btn-category2');
-        var btnCategory3 = document.getElementById('btn-category3');
         var backToFront = document.getElementById('back-to-front');
         var backToSecond = document.getElementById('back-to-second');
         
@@ -2155,13 +2154,6 @@
         if (btnCategory2) {
             btnCategory2.addEventListener('click', function() {
                 var message = appData.currentLanguage === 'en' ? 'Category 2 selected' : 'دسته ۲ انتخاب شد';
-                alert(message);
-            });
-        }
-        
-        if (btnCategory3) {
-            btnCategory3.addEventListener('click', function() {
-                var message = appData.currentLanguage === 'en' ? 'Category 3 selected' : 'دسته ۳ انتخاب شد';
                 alert(message);
             });
         }
