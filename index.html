@@ -1091,7 +1091,7 @@
         </div>
     </div>
 
-    <!-- Second Page -->
+    <!-- Second Page - In Custody button removed -->
     <div id="second-page" class="page">
         <div class="content">
             <button class="back-button" id="back-to-front" data-en="← Back" data-fa="← بازگشت">← Back</button>
@@ -1102,7 +1102,7 @@
             <div class="button-container">
                 <button class="btn btn-primary" id="btn-lost-persons" data-en="In Danger Of Death Penalty" data-fa="در خطر اعدام">In Danger Of Death Penalty</button>
                 <button class="btn btn-secondary" id="btn-category2" data-en="Missing" data-fa="مفقود شده">Missing</button>
-                <button class="btn btn-secondary" id="btn-category3" data-en="In Custody" data-fa="بازداشتی">In Custody</button>
+                <!-- In Custody button removed as requested -->
             </div>
         </div>
     </div>
@@ -1152,12 +1152,12 @@
         </div>
     </div>
 
-    <!-- NEW: Report Page -->
+    <!-- Report Page -->
     <div id="report-page" class="page">
         <div class="content">
             <button class="back-button" id="back-to-front-from-report" data-en="← Back" data-fa="← بازگشت">← Back</button>
-            <div class="message-text" data-en="Please contact @shiftedpropaganda Telegram channel via direct message to report individuals." 
-                 data-fa="برای گزارش افراد به دایرکت چنل تلگرام @shiftedpropaganda مراجعه کنید.">
+            <div class="message-text" data-en="Please contact @shiftedpropaganda via direct message to report individuals." 
+                 data-fa="برای گزارش افراد به دایرکت چنل @shiftedpropaganda مراجعه کنید.">
                 Please contact @shiftedpropaganda via direct message to report individuals.
             </div>
             <div style="margin-top: 20px;">
@@ -1166,7 +1166,7 @@
         </div>
     </div>
 
-    <!-- NEW: Missing Page -->
+    <!-- Missing Page -->
     <div id="missing-page" class="page">
         <div class="content">
             <button class="back-button" id="back-to-second-from-missing" data-en="← Back" data-fa="← بازگشت">← Back</button>
@@ -2114,7 +2114,7 @@
         var btnOther = document.getElementById('btn-other');
         var btnLostPersons = document.getElementById('btn-lost-persons');
         var btnCategory2 = document.getElementById('btn-category2');
-        var btnCategory3 = document.getElementById('btn-category3');
+        // btnCategory3 removed
         var backToFront = document.getElementById('back-to-front');
         var backToSecond = document.getElementById('back-to-second');
         var backToFrontFromReport = document.getElementById('back-to-front-from-report');
@@ -2265,7 +2265,7 @@
             });
         }
         
-        // NEW: Report button leads to report page
+        // Report button leads to report page
         if (btnOther) {
             btnOther.addEventListener('click', function() {
                 showPage(reportPage);
@@ -2279,19 +2279,14 @@
             });
         }
         
-        // NEW: Missing button leads to missing page
+        // Missing button leads to missing page
         if (btnCategory2) {
             btnCategory2.addEventListener('click', function() {
                 showPage(missingPage);
             });
         }
         
-        if (btnCategory3) {
-            btnCategory3.addEventListener('click', function() {
-                var message = appData.currentLanguage === 'en' ? 'Category 3 selected' : 'دسته ۳ انتخاب شد';
-                alert(message);
-            });
-        }
+        // btnCategory3 event listener removed
         
         // Navigation arrows
         if (prevPage) {
