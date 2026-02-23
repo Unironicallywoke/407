@@ -176,6 +176,18 @@
             background-image: url('assets/photo4.jpg');
         }
 
+        /* Report Page - White Background */
+        #report-page {
+            background-color: white !important;
+            background-image: none !important;
+        }
+        
+        /* Missing Page - White Background */
+        #missing-page {
+            background-color: white !important;
+            background-image: none !important;
+        }
+
         /* Mobile Backgrounds */
         @media (max-width: 768px) {
             /* Front Page - Mobile (Photo 2) */
@@ -188,6 +200,18 @@
             #gallery-page {
                 /* REPLACE THIS URL WITH YOUR Photo 5 */
                 background-image: url('assets/photo5.jpg') !important;
+            }
+            
+            /* Report Page - White Background (no change) */
+            #report-page {
+                background-color: white !important;
+                background-image: none !important;
+            }
+            
+            /* Missing Page - White Background (no change) */
+            #missing-page {
+                background-color: white !important;
+                background-image: none !important;
             }
         }
 
@@ -987,6 +1011,59 @@
                 font-size: 0.95rem;
             }
         }
+
+        /* =========================================== */
+        /* NEW: Report Page and Missing Page Styles */
+        /* =========================================== */
+        #report-page .content,
+        #missing-page .content {
+            background-color: white !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .message-text {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+
+        .channel-link {
+            font-size: 1.8rem;
+            color: #5e0808;
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 2px solid #5e0808;
+            padding-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .channel-link:hover {
+            color: #ae2f2f;
+            border-bottom-color: #ae2f2f;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .message-text {
+                font-size: 1.5rem;
+            }
+            .channel-link {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .message-text {
+                font-size: 1.2rem;
+            }
+            .channel-link {
+                font-size: 1.1rem;
+            }
+        }
     </style>
     
     <!-- Add Vazirmatn font for Persian support -->
@@ -1071,6 +1148,31 @@
             <!-- PAGINATION - NUMERAL NAVIGATOR for BOTH Desktop AND Mobile -->
             <div class="pagination-container" id="pagination-container">
                 <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Report Page -->
+    <div id="report-page" class="page">
+        <div class="content">
+            <button class="back-button" id="back-to-front-from-report" data-en="← Back" data-fa="← بازگشت">← Back</button>
+            <div class="message-text" data-en="Please contact @shiftedpropaganda Telegram channel via direct message to report individuals." 
+                 data-fa="برای گزارش افراد به دایرکت چنل تلگرام @shiftedpropaganda مراجعه کنید.">
+                Please contact @shiftedpropaganda via direct message to report individuals.
+            </div>
+            <div style="margin-top: 20px;">
+                <a href="https://t.me/shiftedpropaganda" target="_blank" class="channel-link" data-en="@shiftedpropaganda" data-fa="@shiftedpropaganda">@shiftedpropaganda</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Missing Page -->
+    <div id="missing-page" class="page">
+        <div class="content">
+            <button class="back-button" id="back-to-second-from-missing" data-en="← Back" data-fa="← بازگشت">← Back</button>
+            <div class="message-text" data-en="This section is under development." 
+                 data-fa="این بخش درحال تکمیل است.">
+                This section is under development.
             </div>
         </div>
     </div>
@@ -2005,6 +2107,8 @@
         var frontPage = document.getElementById('front-page');
         var secondPage = document.getElementById('second-page');
         var galleryPage = document.getElementById('gallery-page');
+        var reportPage = document.getElementById('report-page');
+        var missingPage = document.getElementById('missing-page');
         
         var btnPage2 = document.getElementById('btn-page2');
         var btnOther = document.getElementById('btn-other');
@@ -2013,6 +2117,8 @@
         var btnCategory3 = document.getElementById('btn-category3');
         var backToFront = document.getElementById('back-to-front');
         var backToSecond = document.getElementById('back-to-second');
+        var backToFrontFromReport = document.getElementById('back-to-front-from-report');
+        var backToSecondFromMissing = document.getElementById('back-to-second-from-missing');
         
         var prevPage = document.getElementById('prev-page');
         var nextPage = document.getElementById('next-page');
@@ -2138,6 +2244,20 @@
             });
         }
         
+        if (backToFrontFromReport) {
+            backToFrontFromReport.addEventListener('click', function(event) {
+                event.preventDefault();
+                showPage(frontPage);
+            });
+        }
+        
+        if (backToSecondFromMissing) {
+            backToSecondFromMissing.addEventListener('click', function(event) {
+                event.preventDefault();
+                showPage(secondPage);
+            });
+        }
+        
         // Event listeners for navigation buttons
         if (btnPage2) {
             btnPage2.addEventListener('click', function() { 
@@ -2145,10 +2265,10 @@
             });
         }
         
+        // NEW: Report button leads to report page
         if (btnOther) {
             btnOther.addEventListener('click', function() {
-                var message = appData.currentLanguage === 'en' ? 'This would navigate to the report page.' : 'این شما را به صفحه گزارش هدایت می کند.';
-                alert(message);
+                showPage(reportPage);
             });
         }
         
@@ -2159,10 +2279,10 @@
             });
         }
         
+        // NEW: Missing button leads to missing page
         if (btnCategory2) {
             btnCategory2.addEventListener('click', function() {
-                var message = appData.currentLanguage === 'en' ? 'Category 2 selected' : 'دسته ۲ انتخاب شد';
-                alert(message);
+                showPage(missingPage);
             });
         }
         
