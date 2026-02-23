@@ -600,7 +600,7 @@
 
         .mobile-person-date {
             font-size: 1rem;
-            color: #b32121;
+            color: #b81e1e;
         }
 
         /* Navigation arrows - TRANSPARENT and ALWAYS VISIBLE */
@@ -1025,7 +1025,7 @@
             <div class="button-container">
                 <button class="btn btn-primary" id="btn-lost-persons" data-en="In Danger Of Death Penalty" data-fa="در خطر اعدام">In Danger Of Death Penalty</button>
                 <button class="btn btn-secondary" id="btn-category2" data-en="Missing" data-fa="مفقود شده">Missing</button>
-                <!-- In Custody button removed as requested -->
+                <button class="btn btn-secondary" id="btn-category3" data-en="In Custody" data-fa="بازداشتی">In Custody</button>
             </div>
         </div>
     </div>
@@ -1166,6 +1166,7 @@
                 "63. آرمان کیانی وفا",
                 "64. محمد زیغمی",
                 "65. نیلوفر اصفهانی",
+                "66. علی (آرین) فهیم",
                 "67. محمد حسین حسینی",
                 "68. علی خوشنیان",
                 "69. بهروز باسره",
@@ -1250,6 +1251,7 @@
                 "63. Arman Kianivafa",
                 "64. Mohammad Zeghmi",
                 "65. Niloofar Esfahani",
+                "66. Ali (Arian) Fahim",
                 "67. MohammadHossein Hosseini",
                 "68. Ali Khoshniyan",
                 "69. Behrouz Basereh",
@@ -1334,6 +1336,7 @@
                 "63. دی 1404",
                 "64. دی 1404",
                 "65. 20 دی 1404",
+                "66. 18 دی 1404",
                 "67. 12 بهمن 1404",
                 "68. 18 دی 1404",
                 "69. دی 1404",
@@ -1418,6 +1421,7 @@
                 "63. January 2026",
                 "64. January 2026",
                 "65. January 10, 2026",
+                "66. January 8, 2026",
                 "67. February 1, 2026",
                 "68. January 8, 2026",
                 "69. January 2026",
@@ -1502,6 +1506,7 @@
                 "63. https://x.com/Iliaaaa6/status/2020849323894804869?s=20",
                 "64. https://x.com/mobinahw/status/2023450354365722723?s=20",
                 "65. https://x.com/Stervende__/status/2020161662129410133?s=20",
+                "66. https://x.com/bisangar_IR/status/2025306688828461310?s=20",
                 "67. https://x.com/sanfrancisco_z/status/2023179852527079881?s=20",
                 "68. https://x.com/bisangar_IR/status/2019803904608002375?s=20",
                 "69. https://x.com/Ewenniii/status/2020536715706826761?s=20",
@@ -1584,6 +1589,7 @@
                 "63. https://x.com/Iliaaaa6/status/2020849323894804869?s=20",
                 "64. https://x.com/mobinahw/status/2023450354365722723?s=20",
                 "65. https://x.com/Stervende__/status/2020161662129410133?s=20",
+                "66. https://x.com/bisangar_IR/status/2025306688828461310?s=20",
                 "67. https://x.com/sanfrancisco_z/status/2023179852527079881?s=20",
                 "68. https://x.com/bisangar_IR/status/2019803904608002375?s=20",
                 "69. https://x.com/Ewenniii/status/2020536715706826761?s=20",
@@ -1668,6 +1674,7 @@
                 "dp/63.jpg",
                 "dp/64.jpg",
                 "dp/65.jpg",
+                "dp/66.jpg",
                 "dp/67.jpg",
                 "dp/68.jpg",
                 "dp/69.jpg",
@@ -2003,6 +2010,7 @@
         var btnOther = document.getElementById('btn-other');
         var btnLostPersons = document.getElementById('btn-lost-persons');
         var btnCategory2 = document.getElementById('btn-category2');
+        var btnCategory3 = document.getElementById('btn-category3');
         var backToFront = document.getElementById('back-to-front');
         var backToSecond = document.getElementById('back-to-second');
         
@@ -2154,6 +2162,13 @@
         if (btnCategory2) {
             btnCategory2.addEventListener('click', function() {
                 var message = appData.currentLanguage === 'en' ? 'Category 2 selected' : 'دسته ۲ انتخاب شد';
+                alert(message);
+            });
+        }
+        
+        if (btnCategory3) {
+            btnCategory3.addEventListener('click', function() {
+                var message = appData.currentLanguage === 'en' ? 'Category 3 selected' : 'دسته ۳ انتخاب شد';
                 alert(message);
             });
         }
